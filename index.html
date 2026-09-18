@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Put It To Rest</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #050505;
+      color: #c0392b;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .bg {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at top, #1f0808 0%, #050505 65%);
+      z-index: -2;
+      animation: bgMove 14s ease-in-out infinite alternate;
+    }
+    @keyframes bgMove {
+      0% { background: radial-gradient(ellipse at 30% 15%, #1f0808 0%, #050505 65%); }
+      100% { background: radial-gradient(ellipse at 70% 35%, #180606 0%, #050505 65%); }
+    }
+    .wrap {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem 6rem;
+      position: relative;
+      z-index: 1;
+    }
+    header { text-align: center; margin-bottom: 1.8rem; }
+    h1 {
+      font-size: clamp(2.1rem, 5.5vw, 2.9rem);
+      font-weight: 200;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e74c3c;
+      margin-bottom: 0.55rem;
+      text-shadow: 0 0 20px rgba(231, 76, 60, 0.35);
+      animation: glow 5s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
+      50% { text-shadow: 0 0 32px rgba(231, 76, 60, 0.55); }
+    }
+    .tag {
+      font-size: 0.95rem;
+      color: #777;
+      letter-spacing: 0.03em;
+      font-weight: 300;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+    .welcome {
+      text-align: center;
+      font-size: 1.05rem;
+      color: #c39a9a;
+      margin: 1.5rem auto 0.5rem;
+      max-width: 420px;
+      line-height: 1.5;
+    }
+    .private-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #444;
+      margin-top: 1.1rem;
+      letter-spacing: 0.06em;
+    }
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.7rem;
+      margin: 2rem 0 0.5rem;
+      flex-wrap: wrap;
+    }
+    .nav button {
+      background: #1a1a1a;
+      color: #999;
+      border: 1px solid #333;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.8rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .nav button:hover {
+      background: #2a1515;
+      color: #e8b4b4;
+      border-color: #c0392b;
+      transform: translateY(-2px);
+    }
+    .panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.35s ease, margin 0.3s;
+      opacity: 0;
+      text-align: center;
+    }
+    .panel.open {
+      max-height: 300px;
+      opacity: 1;
+      margin: 1rem 0 1.5rem;
+    }
+    .panel-inner {
+      background: rgba(20, 8, 8, 0.75);
+      border: 1px solid #3a1a1a;
+      padding: 1.4rem 1.3rem;
+      border-radius: 4px;
+    }
+    .panel-inner p {
+      color: #bbb;
+      font-size: 1.05rem;
+      margin-bottom: 0.45rem;
+    }
+    .panel-inner .snap {
+      font-size: 1.3rem;
+      color: #e74c3c;
+      font-weight: 500;
+    }
+    .panel-inner .compliment {
+      font-size: 1.25rem;
+      color: #e8b4b4;
+      line-height: 1.5;
+    }
+    .hotline {
+      background: rgba(30, 15, 15, 0.85);
+      border: 1px solid #5a2020;
+      padding: 1rem;
+      border-radius: 4px;
+    }
+    .hotline strong {
+      display: block;
+      color: #e74c3c;
+      font-size: 1.15rem;
+      margin-bottom: 0.3rem;
+    }
+    .hotline span {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.2rem;
+      margin: 1.8rem 0 2.2rem;
+      font-size: 0.8rem;
+      color: #444;
+    }
+    .stats span { color: #777; }
+    .lines {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .line {
+      font-size: 1.15rem;
+      padding: 0.7rem 1rem;
+      border-left: 3px solid #3a1212;
+      background: rgba(20, 8, 8, 0.45);
+      transition: all 0.3s;
+    }
+    .line:hover {
+      background: rgba(55, 18, 18, 0.7);
+      border-color: #c0392b;
+      transform: translateX(5px);
+    }
+    .line.custom {
+      border-left-color: #8e2a2a;
+      color: #e67e7e;
+    }
+    .controls {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .input-row {
+      display: flex;
+      gap: 0.6rem;
+    }
+    input {
+      flex: 1;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      color: #ddd;
+      padding: 0.9rem 1.1rem;
+      font-size: 1rem;
+      border-radius: 3px;
+      outline: none;
+      transition: all 0.25s;
+    }
+    input:focus {
+      border-color: #c0392b;
+      box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
+    }
+    button.primary {
+      background: #8e2a2a;
+      color: #fff;
+      border: none;
+      padding: 0 1.5rem;
+      font-size: 0.9rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    button.primary:hover {
+      background: #c0392b;
+      transform: translateY(-1px);
+    }
+    .actions {
+      display: flex;
+      gap: 0.7rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .actions button {
+      background: #1a1a1a;
+      color: #888;
+      border: 1px solid #333;
+      padding: 0.55rem 1.1rem;
+      font-size: 0.8rem;
+      transition: all 0.25s;
+    }
+    .actions button:hover {
+      background: #222;
+      color: #ccc;
+      border-color: #555;
+    }
+    .release-btn {
+      margin-top: 1.8rem;
+      width: 100%;
+      background: transparent;
+      border: 1px solid #5a2020;
+      color: #c0392b;
+      padding: 0.9rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .release-btn:hover {
+      background: rgba(80, 20, 20, 0.35);
+      border-color: #e74c3c;
+      color: #e74c3c;
+    }
+    .saved {
+      color: #5a8f5a;
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 0.35rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .saved.show { opacity: 1; }
+    .release-message {
+      display: none;
+      text-align: center;
+      padding: 4rem 1rem;
+      color: #666;
+      font-size: 1.15rem;
+      line-height: 1.7;
+    }
+    .release-message.show { display: block; }
+    footer {
+      margin-top: 4rem;
+      text-align: center;
+      color: #2a2a2a;
+      font-size: 0.75rem;
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal {
+      background: #0e0e0e;
+      border: 1px solid #333;
+      max-width: 520px;
+      width: 90%;
+      padding: 2.5rem 2rem;
+      border-radius: 6px;
+      position: relative;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .modal h2 {
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: #e74c3c;
+      margin-bottom: 1.4rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .modal p {
+      color: #ccc;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      margin-bottom: 1.1rem;
+    }
+    .modal .close {
+      position: absolute;
+      top: 1rem;
+      right: 1.2rem;
+      background: none;
+      border: none;
+      color: #777;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .modal .close:hover { color: #ccc; }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="wrap">
+    <header>
+      <h1>Put It To Rest</h1>
+      <div class="tag">a place where you can put your thoughts to rest</div>
+      <div class="welcome">remember you deserve to live another day</div>
+      <div class="private-note">This page only exists on your device</div>
+    </header>
+
+    <div class="nav">
+      <button onclick="openNotes()">Creator’s Notes</button>
+      <button onclick="toggleContact()">Contact Me</button>
+      <button onclick="toggleHelp()">Need Help?</button>
+      <button onclick="showCompliment()">Kind Words</button>
+    </div>
+
+    <div class="panel" id="contactPanel">
+      <div class="panel-inner">
+        <p>You can reach me here:</p>
+        <div class="snap">Snapchat: bentley67_420</div>
+      </div>
+    </div>
+
+    <div class="panel" id="helpPanel">
+      <div class="panel-inner">
+        <div class="hotline">
+          <strong>988 Suicide & Crisis Lifeline</strong>
+          <span>Call or text 988 (United States) — 24/7, free, and confidential</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="complimentPanel">
+      <div class="panel-inner">
+        <div class="compliment" id="complimentText">You are good enough.</div>
+      </div>
+    </div>
+
+    <div class="stats" id="stats">
+      <div><span id="count">0</span> lines</div>
+      <div><span id="customCount">0</span> yours</div>
+    </div>
+
+    <div class="lines" id="lines"></div>
+
+    <div class="release-message" id="releaseMessage">
+      You let it go.<br><br>
+      The words are gone.<br>
+      You can begin again whenever you’re ready.
+    </div>
+
+    <div class="controls" id="controls">
+      <div class="input-row">
+        <input type="text" id="newLine" placeholder="Write something and press Enter..." maxlength="140" autocomplete="off">
+        <button class="primary" onclick="add()">Add</button>
+      </div>
+      <div class="saved" id="savedMsg">Saved</div>
+      <div class="actions">
+        <button onclick="randomHighlight()">Highlight Random</button>
+        <button onclick="clearCustom()">Clear Mine</button>
+        <button onclick="clearAllSaved()">Delete Saved</button>
+      </div>
+      <button class="release-btn" onclick="releaseAll()">Release Everything</button>
+    </div>
+
+    <footer>Nothing is uploaded • Nothing is shared • Close the tab when you’re finished</footer>
+  </div>
+
+  <div class="modal-overlay" id="notesModal">
+    <div class="modal">
+      <button class="close" onclick="closeNotes()">&times;</button>
+      <h2>Creator’s Notes</h2>
+      <p>Hello, my name is Bentley.</p>
+      <p>I created this when I was 15. I had been struggling with my mental health for a long time and never felt comfortable opening up to the people around me. Talking about the heavier things always felt impossible, so I decided to build a place where those thoughts could exist without an audience.</p>
+      <p>I’m still struggling with my mental health. Some days are heavier than others, and I don’t have it all figured out. This page is something I made in the middle of that, not after it was over.</p>
+      <p>This site is completely private. Nothing you write is uploaded or shared. Everything stays only on your device. I made it this way on purpose — so it could feel safe.</p>
+      <p>I’m really proud of this page. It means more to me than I can fully explain. It started as something small I made for myself, and watching it become a space that others might also find useful has been one of the few things that’s made me feel like I actually created something that matters.</p>
+      <p>You can write the short, sharp things that sit in your chest, and you can also choose to release them when you’re ready. Holding on is allowed. Letting go is allowed too.</p>
+      <p>I don’t claim this is a solution. It’s just a quiet corner of the internet I wish I had when I was younger. A place to be honest without having to perform strength for anyone else.</p>
+      <p>If you are in crisis, please reach out for real support. In the United States you can call or text <strong>988</strong>. You deserve help that goes beyond a webpage.</p>
+      <p>Thank you for being here.</p>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "putittorest_custom_lines";
+    const base = ["I'm a failure","I hate myself","I'm worthless","Nothing I do is ever good enough","I'm a disappointment","I can't do anything right","Everyone would be better off without me","I'm just taking up space","I hate how I look","I hate how I sound","I hate everything about me","I'm so tired of being me","I keep messing everything up","I don't deserve good things","I'm broken","No one actually cares","I'm invisible","I'm a burden","I ruin everything I touch","I'm not strong enough","I'm not smart enough","I'm not good enough","I hate my life","I hate waking up","I feel empty all the time","I'm stuck and I'll never get out","I'm a waste of potential","I'm a waste of time","I'm a waste of space","I don't matter","I'm exhausted of pretending","I'm falling behind everyone","I have no real friends","I'm the problem","I make people tired","I talk too much and say nothing","I should be better by now","I'm running out of reasons","I feel nothing most days","I'm scared of myself","I don't trust my own mind","I'm tired of hoping","I feel like giving up","No one understands me","I'm always the second choice","I push everyone away","I'm too much and not enough at the same time","I fake being okay every day","I don't know who I am anymore","I'm drowning and no one notices","I wish I could start over","I'm ashamed of who I am","I feel completely alone","I don't belong anywhere","I'm tired of fighting myself","I hate the person in the mirror","Nothing feels real anymore","I'm losing myself","I don't see a future","I'm just existing, not living"];
+    const compliments = ["You are good enough.","You are trying, and that matters.","It’s okay to feel this way.","You deserve rest.","You are not a burden.","You are allowed to take up space.","You are doing the best you can.","You matter.","It’s okay to not be okay.","You are stronger than you feel right now.","You don’t have to fix everything today.","You are worthy of kindness.","Your feelings are valid.","You are not alone in this.","It’s okay to ask for help.","You have survived hard days before.","You are more than your worst thoughts.","You deserve gentleness, especially from yourself.","This moment does not define you.","You are allowed to rest without earning it."];
+
+    const linesEl = document.getElementById("lines");
+    let custom = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(custom));
+      const msg = document.getElementById("savedMsg");
+      msg.classList.add("show");
+      setTimeout(() => msg.classList.remove("show"), 1200);
+    }
+
+    function render() {
+      linesEl.innerHTML = "";
+      const all = base.concat(custom);
+      all.forEach(function(txt, i) {
+        const d = document.createElement("div");
+        d.className = "line" + (i >= base.length ? " custom" : "");
+        d.textContent = txt;
+        linesEl.appendChild(d);
+      });
+      document.getElementById("count").textContent = all.length;
+      document.getElementById("customCount").textContent = custom.length;
+    }
+
+    function add() {
+      const input = document.getElementById("newLine");
+      const t = input.value.trim();
+      if (!t) return;
+      custom.push(t);
+      input.value = "";
+      save();
+      render();
+    }
+
+    function clearCustom() {
+      if (!custom.length) return;
+      if (confirm("Clear all the lines you added?")) {
+        custom = [];
+        save();
+        render();
+      }
+    }
+
+    function clearAllSaved() {
+      if (confirm("Permanently delete all saved lines from this browser?")) {
+        custom = [];
+        localStorage.removeItem(STORAGE_KEY);
+        render();
+      }
+    }
+
+    function randomHighlight() {
+      const items = linesEl.querySelectorAll(".line");
+      items.forEach(function(el){ el.style.borderLeftColor = ""; });
+      if (!items.length) return;
+      const el = items[Math.floor(Math.random() * items.length)];
+      el.style.borderLeftColor = "#e74c3c";
+      el.scrollIntoView({behavior: "smooth", block: "center"});
+    }
+
+    function releaseAll() {
+      if (!confirm("Release everything?\n\nThis will permanently erase all lines. This cannot be undone.")) return;
+      custom = [];
+      localStorage.removeItem(STORAGE_KEY);
+      linesEl.innerHTML = "";
+      document.getElementById("stats").style.display = "none";
+      document.getElementById("controls").style.display = "none";
+      document.getElementById("releaseMessage").classList.add("show");
+    }
+
+    function closeAllPanels() {
+      document.getElementById("contactPanel").classList.remove("open");
+      document.getElementById("helpPanel").classList.remove("open");
+      document.getElementById("complimentPanel").classList.remove("open");
+    }
+
+    function toggleContact() {
+      const panel = document.getElementById("contactPanel");
+      const isOpen = panel.classList.contains("open");
+      closeAllPanels();
+      if (!isOpen) panel.classList.add("open");
+    }
+
+    function toggleHelp() {
+      const panel = document.getElementById("helpPanel");
+      const isOpen = panel.classList.contains("open");
+      closeAllPanels();
+      if (!isOpen) panel.classList.add("open");
+    }
+
+    function showCompliment() {
+      const panel = document.getElementById("complimentPanel");
+      const isOpen = panel.classList.contains("open");
+      closeAllPanels();
+      document.getElementById("complimentText").textContent = compliments[Math.floor(Math.random() * compliments.length)];
+      if (!isOpen) panel.classList.add("open");
+    }
+
+    function openNotes() {
+      document.getElementById("notesModal").classList.add("open");
+    }
+
+    function closeNotes() {
+      document.getElementById("notesModal").classList.remove("open");
+    }
+
+    document.getElementById("notesModal").addEventListener("click", function(e) {
+      if (e.target === this) closeNotes();
+    });
+
+    document.getElementById("newLine").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") add();
+    });
+
+    render();
+  </script>
+</body>
+</html>
