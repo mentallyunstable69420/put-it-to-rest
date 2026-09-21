@@ -170,7 +170,7 @@
       gap: 1rem;
     }
     .input-row { display: flex; gap: 0.6rem; }
-    input, textarea {
+    input {
       flex: 1;
       background: #111;
       border: 1px solid #2a2a2a;
@@ -182,7 +182,7 @@
       transition: all 0.25s;
       font-family: inherit;
     }
-    input:focus, textarea:focus {
+    input:focus {
       border-color: #c0392b;
       box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
     }
@@ -289,7 +289,7 @@
       border-color: #c0392b;
     }
 
-    /* ===== GOOD THINGS PAGE (Blue Theme) ===== */
+    /* Good Things Page - Blue */
     .good-page {
       background: radial-gradient(ellipse at top, #0a1628 0%, #050505 70%);
     }
@@ -454,7 +454,7 @@
     </div>
   </div>
 
-  <!-- GOOD THINGS PAGE (Blue) -->
+  <!-- GOOD THINGS PAGE -->
   <div class="page good-page" id="goodPage">
     <div class="wrap">
       <header>
@@ -512,28 +512,59 @@
     let custom = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     let goodLines = JSON.parse(localStorage.getItem(GOOD_KEY) || "[]");
 
-    let audioCtx, oscillator, gainNode, isPlaying = false;
+    // ===== Gentle Piano Melody =====
+    let audioCtx = null;
+    let isPlaying = false;
+    let melodyInterval = null;
+
+    // Soft piano-like notes (frequencies)
+    const melody = [
+      261.63, 293.66, 329.63, 293.66,  // C D E D
+      261.63, 246.94, 261.63, 220.00,  // C B C A
+      246.94, 261.63, 293.66, 261.63,  // B C D C
+      246.94, 220.00, 196.00, 220.00   // B A G A
+    ];
+
+    function playNote(freq, startTime, duration) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.value = freq;
+
+      // Soft piano-like envelope
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.03, startTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.1);
+    }
+
+    function playMelody() {
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      melody.forEach((freq, i) => {
+        playNote(freq, now + i * 0.7, 1.1);
+      });
+    }
 
     function toggleSound() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        oscillator = audioCtx.createOscillator();
-        gainNode = audioCtx.createGain();
-        oscillator.type = "sine";
-        oscillator.frequency.value = 80;
-        gainNode.gain.value = 0.015;
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.start();
       }
 
       if (isPlaying) {
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+        clearInterval(melodyInterval);
         isPlaying = false;
         document.getElementById("soundBtn").textContent = "Sound: Off";
         document.getElementById("soundBtn").classList.remove("active");
       } else {
-        gainNode.gain.exponentialRampToValueAtTime(0.015, audioCtx.currentTime + 0.5);
+        playMelody();
+        melodyInterval = setInterval(playMelody, 12000); // repeat every 12 seconds
         isPlaying = true;
         document.getElementById("soundBtn").textContent = "Sound: On";
         document.getElementById("soundBtn").classList.add("active");
