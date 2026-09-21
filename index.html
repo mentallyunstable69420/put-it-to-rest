@@ -15,7 +15,6 @@
       transition: background 1.2s ease;
     }
 
-    /* Weight levels */
     body.weight-0 .bg { background: radial-gradient(ellipse at top, #1f0808 0%, #050505 65%); }
     body.weight-1 .bg { background: radial-gradient(ellipse at top, #1a0606 0%, #040404 65%); }
     body.weight-2 .bg { background: radial-gradient(ellipse at top, #150404 0%, #030303 65%); }
@@ -27,12 +26,10 @@
       inset: 0;
       z-index: -2;
       transition: background 1.2s ease;
-      animation: bgMove 14s ease-in-out infinite alternate;
     }
-    @keyframes bgMove {
-      0% { filter: brightness(1); }
-      100% { filter: brightness(1.08); }
-    }
+
+    .page { display: none; }
+    .page.active { display: block; }
 
     .wrap {
       max-width: 700px;
@@ -41,6 +38,7 @@
       position: relative;
       z-index: 1;
     }
+
     header { text-align: center; margin-bottom: 1.8rem; }
     h1 {
       font-size: clamp(2.1rem, 5.5vw, 2.9rem);
@@ -81,6 +79,7 @@
       margin-top: 1.1rem;
       letter-spacing: 0.06em;
     }
+
     .nav {
       display: flex;
       justify-content: center;
@@ -104,6 +103,7 @@
       border-color: #c0392b;
       transform: translateY(-2px);
     }
+
     .panel {
       max-height: 0;
       overflow: hidden;
@@ -125,6 +125,7 @@
     .panel-inner p { color: #bbb; font-size: 1.05rem; margin-bottom: 0.45rem; }
     .panel-inner .snap { font-size: 1.3rem; color: #e74c3c; font-weight: 500; }
     .panel-inner .compliment { font-size: 1.25rem; color: #e8b4b4; line-height: 1.5; }
+
     .hotline {
       background: rgba(30, 15, 15, 0.85);
       border: 1px solid #5a2020;
@@ -133,6 +134,7 @@
     }
     .hotline strong { display: block; color: #e74c3c; font-size: 1.15rem; margin-bottom: 0.3rem; }
     .hotline span { color: #aaa; font-size: 0.9rem; }
+
     .stats {
       display: flex;
       justify-content: center;
@@ -142,6 +144,7 @@
       color: #444;
     }
     .stats span { color: #777; }
+
     .lines { display: flex; flex-direction: column; gap: 0.85rem; }
     .line {
       font-size: 1.15rem;
@@ -159,6 +162,7 @@
       border-left-color: #8e2a2a;
       color: #e67e7e;
     }
+
     .controls {
       margin-top: 3rem;
       display: flex;
@@ -166,7 +170,7 @@
       gap: 1rem;
     }
     .input-row { display: flex; gap: 0.6rem; }
-    input {
+    input, textarea {
       flex: 1;
       background: #111;
       border: 1px solid #2a2a2a;
@@ -176,11 +180,13 @@
       border-radius: 3px;
       outline: none;
       transition: all 0.25s;
+      font-family: inherit;
     }
-    input:focus {
+    input:focus, textarea:focus {
       border-color: #c0392b;
       box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
     }
+
     button.primary {
       background: #8e2a2a;
       color: #fff;
@@ -195,6 +201,7 @@
       background: #c0392b;
       transform: translateY(-1px);
     }
+
     .actions {
       display: flex;
       gap: 0.7rem;
@@ -214,6 +221,7 @@
       color: #ccc;
       border-color: #555;
     }
+
     .release-btn {
       margin-top: 1.8rem;
       width: 100%;
@@ -233,6 +241,7 @@
       border-color: #e74c3c;
       color: #e74c3c;
     }
+
     .saved {
       color: #5a8f5a;
       font-size: 0.75rem;
@@ -242,6 +251,7 @@
       transition: opacity 0.3s;
     }
     .saved.show { opacity: 1; }
+
     .release-message {
       display: none;
       text-align: center;
@@ -251,12 +261,71 @@
       line-height: 1.7;
     }
     .release-message.show { display: block; }
+
     footer {
       margin-top: 4rem;
       text-align: center;
       color: #2a2a2a;
       font-size: 0.75rem;
     }
+
+    .sound-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #1a1a1a;
+      color: #999;
+      border: 1px solid #333;
+      padding: 0.6rem 1rem;
+      font-size: 0.8rem;
+      border-radius: 3px;
+      cursor: pointer;
+      z-index: 50;
+      transition: all 0.25s;
+    }
+    .sound-btn:hover, .sound-btn.active {
+      background: #2a1515;
+      color: #e8b4b4;
+      border-color: #c0392b;
+    }
+
+    /* ===== GOOD THINGS PAGE (Blue Theme) ===== */
+    .good-page {
+      background: radial-gradient(ellipse at top, #0a1628 0%, #050505 70%);
+    }
+    .good-page h1 {
+      color: #7ba3c9;
+      text-shadow: 0 0 22px rgba(123, 163, 201, 0.35);
+    }
+    .good-page .tag { color: #6b8fad; }
+    .good-page .nav button:hover {
+      background: #152030;
+      color: #a8c5e0;
+      border-color: #5a8ab5;
+    }
+    .good-lines .line {
+      border-left-color: #2a4a6a;
+      background: rgba(12, 25, 40, 0.5);
+      color: #a8c5e0;
+    }
+    .good-lines .line:hover {
+      background: rgba(20, 40, 65, 0.7);
+      border-color: #7ba3c9;
+    }
+    .good-page button.primary {
+      background: #2a5080;
+    }
+    .good-page button.primary:hover {
+      background: #3a6a9e;
+    }
+    .good-page input:focus {
+      border-color: #5a8ab5;
+      box-shadow: 0 0 0 3px rgba(90, 138, 181, 0.2);
+    }
+    .good-page .saved {
+      color: #7ba3c9;
+    }
+
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -313,72 +382,106 @@
 </head>
 <body class="weight-0">
   <div class="bg"></div>
-  <div class="wrap">
-    <header>
-      <h1>Put It To Rest</h1>
-      <div class="tag">a place where you can put your thoughts to rest</div>
-      <div class="welcome">remember you deserve to live another day</div>
-      <div class="private-note">This page only exists on your device</div>
-    </header>
 
-    <div class="nav">
-      <button onclick="openNotes()">Creator’s Notes</button>
-      <button onclick="toggleContact()">Contact Me</button>
-      <button onclick="toggleHelp()">Need Help?</button>
-      <button onclick="showCompliment()">Kind Words</button>
-    </div>
+  <!-- MAIN PAGE -->
+  <div class="page active" id="mainPage">
+    <div class="wrap">
+      <header>
+        <h1>Put It To Rest</h1>
+        <div class="tag">a place where you can put your thoughts to rest</div>
+        <div class="welcome">remember you deserve to live another day</div>
+        <div class="private-note">This page only exists on your device</div>
+      </header>
 
-    <div class="panel" id="contactPanel">
-      <div class="panel-inner">
-        <p>You can reach me here:</p>
-        <div class="snap">Snapchat: bentley67_420</div>
+      <div class="nav">
+        <button onclick="openNotes()">Creator’s Notes</button>
+        <button onclick="toggleContact()">Contact Me</button>
+        <button onclick="toggleHelp()">Need Help?</button>
+        <button onclick="showCompliment()">Kind Words</button>
+        <button onclick="showGoodPage()">Good Things</button>
       </div>
-    </div>
 
-    <div class="panel" id="helpPanel">
-      <div class="panel-inner">
-        <div class="hotline">
-          <strong>988 Suicide & Crisis Lifeline</strong>
-          <span>Call or text 988 (United States) — 24/7, free, and confidential</span>
+      <div class="panel" id="contactPanel">
+        <div class="panel-inner">
+          <p>You can reach me here:</p>
+          <div class="snap">Snapchat: bentley67_420</div>
+        </div>
+      </div>
+
+      <div class="panel" id="helpPanel">
+        <div class="panel-inner">
+          <div class="hotline">
+            <strong>988 Suicide & Crisis Lifeline</strong>
+            <span>Call or text 988 (United States) — 24/7, free, and confidential</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="complimentPanel">
+        <div class="panel-inner">
+          <div class="compliment" id="complimentText">You are good enough.</div>
+        </div>
+      </div>
+
+      <div class="stats" id="stats">
+        <div><span id="count">0</span> lines</div>
+        <div><span id="customCount">0</span> yours</div>
+      </div>
+
+      <div class="lines" id="lines"></div>
+
+      <div class="release-message" id="releaseMessage">
+        You let it go.<br><br>
+        The words are gone.<br>
+        You can begin again whenever you’re ready.
+      </div>
+
+      <div class="controls" id="controls">
+        <div class="input-row">
+          <input type="text" id="newLine" placeholder="Write something and press Enter..." maxlength="140" autocomplete="off">
+          <button class="primary" onclick="add()">Add</button>
+        </div>
+        <div class="saved" id="savedMsg">Saved</div>
+        <div class="actions">
+          <button onclick="randomHighlight()">Highlight Random</button>
+          <button onclick="clearCustom()">Clear Mine</button>
+          <button onclick="clearAllSaved()">Delete Saved</button>
+        </div>
+        <button class="release-btn" onclick="releaseAll()">Release Everything</button>
+      </div>
+
+      <footer>Nothing is uploaded • Nothing is shared • Close the tab when you’re finished</footer>
+    </div>
+  </div>
+
+  <!-- GOOD THINGS PAGE (Blue) -->
+  <div class="page good-page" id="goodPage">
+    <div class="wrap">
+      <header>
+        <h1>Good Things</h1>
+        <div class="tag">a quieter place to write kind things to yourself</div>
+      </header>
+
+      <div class="nav">
+        <button onclick="showMainPage()">← Back</button>
+      </div>
+
+      <div class="lines good-lines" id="goodLines"></div>
+
+      <div class="controls">
+        <div class="input-row">
+          <input type="text" id="goodInput" placeholder="Write something kind..." maxlength="140" autocomplete="off">
+          <button class="primary" onclick="addGood()">Add</button>
+        </div>
+        <div class="saved" id="goodSaved">Saved</div>
+        <div class="actions">
+          <button onclick="clearGood()">Clear All</button>
         </div>
       </div>
     </div>
-
-    <div class="panel" id="complimentPanel">
-      <div class="panel-inner">
-        <div class="compliment" id="complimentText">You are good enough.</div>
-      </div>
-    </div>
-
-    <div class="stats" id="stats">
-      <div><span id="count">0</span> lines</div>
-      <div><span id="customCount">0</span> yours</div>
-    </div>
-
-    <div class="lines" id="lines"></div>
-
-    <div class="release-message" id="releaseMessage">
-      You let it go.<br><br>
-      The words are gone.<br>
-      You can begin again whenever you’re ready.
-    </div>
-
-    <div class="controls" id="controls">
-      <div class="input-row">
-        <input type="text" id="newLine" placeholder="Write something and press Enter..." maxlength="140" autocomplete="off">
-        <button class="primary" onclick="add()">Add</button>
-      </div>
-      <div class="saved" id="savedMsg">Saved</div>
-      <div class="actions">
-        <button onclick="randomHighlight()">Highlight Random</button>
-        <button onclick="clearCustom()">Clear Mine</button>
-        <button onclick="clearAllSaved()">Delete Saved</button>
-      </div>
-      <button class="release-btn" onclick="releaseAll()">Release Everything</button>
-    </div>
-
-    <footer>Nothing is uploaded • Nothing is shared • Close the tab when you’re finished</footer>
   </div>
+
+  <button class="sound-btn" id="soundBtn" onclick="toggleSound()">Sound: Off</button>
 
   <div class="modal-overlay" id="notesModal">
     <div class="modal">
@@ -396,17 +499,46 @@
     </div>
   </div>
 
-  <!-- GoatCounter -->
   <script data-goatcounter="https://mentallyunstable69420.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 
   <script>
     const STORAGE_KEY = "putittorest_custom_lines";
+    const GOOD_KEY = "putittorest_good_lines";
+
     const base = ["I'm a failure","I hate myself","I'm worthless","Nothing I do is ever good enough","I'm a disappointment","I can't do anything right","Everyone would be better off without me","I'm just taking up space","I hate how I look","I hate how I sound","I hate everything about me","I'm so tired of being me","I keep messing everything up","I don't deserve good things","I'm broken","No one actually cares","I'm invisible","I'm a burden","I ruin everything I touch","I'm not strong enough","I'm not smart enough","I'm not good enough","I hate my life","I hate waking up","I feel empty all the time","I'm stuck and I'll never get out","I'm a waste of potential","I'm a waste of time","I'm a waste of space","I don't matter","I'm exhausted of pretending","I'm falling behind everyone","I have no real friends","I'm the problem","I make people tired","I talk too much and say nothing","I should be better by now","I'm running out of reasons","I feel nothing most days","I'm scared of myself","I don't trust my own mind","I'm tired of hoping","I feel like giving up","No one understands me","I'm always the second choice","I push everyone away","I'm too much and not enough at the same time","I fake being okay every day","I don't know who I am anymore","I'm drowning and no one notices","I wish I could start over","I'm ashamed of who I am","I feel completely alone","I don't belong anywhere","I'm tired of fighting myself","I hate the person in the mirror","Nothing feels real anymore","I'm losing myself","I don't see a future","I'm just existing, not living"];
     const compliments = ["You are good enough.","You are trying, and that matters.","It’s okay to feel this way.","You deserve rest.","You are not a burden.","You are allowed to take up space.","You are doing the best you can.","You matter.","It’s okay to not be okay.","You are stronger than you feel right now.","You don’t have to fix everything today.","You are worthy of kindness.","Your feelings are valid.","You are not alone in this.","It’s okay to ask for help.","You have survived hard days before.","You are more than your worst thoughts.","You deserve gentleness, especially from yourself.","This moment does not define you.","You are allowed to rest without earning it."];
 
-    const linesEl = document.getElementById("lines");
     let custom = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    let goodLines = JSON.parse(localStorage.getItem(GOOD_KEY) || "[]");
+
+    let audioCtx, oscillator, gainNode, isPlaying = false;
+
+    function toggleSound() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        oscillator = audioCtx.createOscillator();
+        gainNode = audioCtx.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.value = 80;
+        gainNode.gain.value = 0.015;
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+      }
+
+      if (isPlaying) {
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+        isPlaying = false;
+        document.getElementById("soundBtn").textContent = "Sound: Off";
+        document.getElementById("soundBtn").classList.remove("active");
+      } else {
+        gainNode.gain.exponentialRampToValueAtTime(0.015, audioCtx.currentTime + 0.5);
+        isPlaying = true;
+        document.getElementById("soundBtn").textContent = "Sound: On";
+        document.getElementById("soundBtn").classList.add("active");
+      }
+    }
 
     function updateWeight() {
       const count = custom.length;
@@ -415,8 +547,7 @@
       if (count >= 7) level = 2;
       if (count >= 12) level = 3;
       if (count >= 18) level = 4;
-
-      document.body.className = "weight-" + level;
+      document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-" + level;
     }
 
     function save() {
@@ -428,6 +559,7 @@
     }
 
     function render() {
+      const linesEl = document.getElementById("lines");
       linesEl.innerHTML = "";
       const all = base.concat(custom);
       all.forEach(function(txt, i) {
@@ -469,7 +601,7 @@
     }
 
     function randomHighlight() {
-      const items = linesEl.querySelectorAll(".line");
+      const items = document.querySelectorAll("#lines .line");
       items.forEach(function(el){ el.style.borderLeftColor = ""; });
       if (!items.length) return;
       const el = items[Math.floor(Math.random() * items.length)];
@@ -479,23 +611,64 @@
 
     function releaseAll() {
       if (!confirm("Release everything?\n\nThis will permanently erase all lines. This cannot be undone.")) return;
-
       custom = [];
       localStorage.removeItem(STORAGE_KEY);
-
       document.getElementById("stats").style.display = "none";
       document.getElementById("controls").style.display = "none";
       document.getElementById("lines").innerHTML = "";
       document.getElementById("releaseMessage").classList.add("show");
       updateWeight();
 
-      // Return to normal after 20 seconds
       setTimeout(function() {
         document.getElementById("releaseMessage").classList.remove("show");
         document.getElementById("stats").style.display = "flex";
         document.getElementById("controls").style.display = "flex";
         render();
       }, 20000);
+    }
+
+    function renderGood() {
+      const el = document.getElementById("goodLines");
+      el.innerHTML = "";
+      goodLines.forEach(function(txt) {
+        const d = document.createElement("div");
+        d.className = "line";
+        d.textContent = txt;
+        el.appendChild(d);
+      });
+    }
+
+    function addGood() {
+      const input = document.getElementById("goodInput");
+      const t = input.value.trim();
+      if (!t) return;
+      goodLines.push(t);
+      input.value = "";
+      localStorage.setItem(GOOD_KEY, JSON.stringify(goodLines));
+      const msg = document.getElementById("goodSaved");
+      msg.classList.add("show");
+      setTimeout(() => msg.classList.remove("show"), 1200);
+      renderGood();
+    }
+
+    function clearGood() {
+      if (!goodLines.length) return;
+      if (confirm("Clear all good things?")) {
+        goodLines = [];
+        localStorage.removeItem(GOOD_KEY);
+        renderGood();
+      }
+    }
+
+    function showGoodPage() {
+      document.getElementById("mainPage").classList.remove("active");
+      document.getElementById("goodPage").classList.add("active");
+      renderGood();
+    }
+
+    function showMainPage() {
+      document.getElementById("goodPage").classList.remove("active");
+      document.getElementById("mainPage").classList.add("active");
     }
 
     function closeAllPanels() {
@@ -540,6 +713,10 @@
 
     document.getElementById("newLine").addEventListener("keydown", function(e) {
       if (e.key === "Enter") add();
+    });
+
+    document.getElementById("goodInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") addGood();
     });
 
     render();
