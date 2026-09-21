@@ -269,26 +269,6 @@
       font-size: 0.75rem;
     }
 
-    .sound-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #1a1a1a;
-      color: #999;
-      border: 1px solid #333;
-      padding: 0.6rem 1rem;
-      font-size: 0.8rem;
-      border-radius: 3px;
-      cursor: pointer;
-      z-index: 50;
-      transition: all 0.25s;
-    }
-    .sound-btn:hover, .sound-btn.active {
-      background: #2a1515;
-      color: #e8b4b4;
-      border-color: #c0392b;
-    }
-
     /* Good Things Page - Blue */
     .good-page {
       background: radial-gradient(ellipse at top, #0a1628 0%, #050505 70%);
@@ -481,8 +461,6 @@
     </div>
   </div>
 
-  <button class="sound-btn" id="soundBtn" onclick="toggleSound()">Sound: Off</button>
-
   <div class="modal-overlay" id="notesModal">
     <div class="modal">
       <button class="close" onclick="closeNotes()">&times;</button>
@@ -511,65 +489,6 @@
 
     let custom = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     let goodLines = JSON.parse(localStorage.getItem(GOOD_KEY) || "[]");
-
-    // ===== Gentle Piano Melody =====
-    let audioCtx = null;
-    let isPlaying = false;
-    let melodyInterval = null;
-
-    // Soft piano-like notes (frequencies)
-    const melody = [
-      261.63, 293.66, 329.63, 293.66,  // C D E D
-      261.63, 246.94, 261.63, 220.00,  // C B C A
-      246.94, 261.63, 293.66, 261.63,  // B C D C
-      246.94, 220.00, 196.00, 220.00   // B A G A
-    ];
-
-    function playNote(freq, startTime, duration) {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-
-      osc.type = "sine";
-      osc.frequency.value = freq;
-
-      // Soft piano-like envelope
-      gain.gain.setValueAtTime(0, startTime);
-      gain.gain.linearRampToValueAtTime(0.03, startTime + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(startTime);
-      osc.stop(startTime + duration + 0.1);
-    }
-
-    function playMelody() {
-      if (!audioCtx) return;
-      const now = audioCtx.currentTime;
-      melody.forEach((freq, i) => {
-        playNote(freq, now + i * 0.7, 1.1);
-      });
-    }
-
-    function toggleSound() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-
-      if (isPlaying) {
-        clearInterval(melodyInterval);
-        isPlaying = false;
-        document.getElementById("soundBtn").textContent = "Sound: Off";
-        document.getElementById("soundBtn").classList.remove("active");
-      } else {
-        playMelody();
-        melodyInterval = setInterval(playMelody, 12000); // repeat every 12 seconds
-        isPlaying = true;
-        document.getElementById("soundBtn").textContent = "Sound: On";
-        document.getElementById("soundBtn").classList.add("active");
-      }
-    }
 
     function updateWeight() {
       const count = custom.length;
