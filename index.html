@@ -396,7 +396,9 @@
       border-radius: 6px;
       padding: 1rem;
       z-index: 100;
-      min-width: 180px;
+      min-width: 210px;
+      max-height: 70vh;
+      overflow-y: auto;
     }
     .secret-menu.open {
       display: block;
@@ -486,6 +488,39 @@
       text-align: center;
       margin: 1rem auto;
       display: block;
+    }
+
+    .change-pass-box {
+      margin-top: 2rem;
+      padding: 1.2rem;
+      background: rgba(20, 15, 30, 0.5);
+      border: 1px solid #3a2a4a;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .change-pass-box input {
+      max-width: 220px;
+      margin: 0.6rem auto;
+      display: block;
+      text-align: center;
+    }
+
+    .shake { animation: shake 0.5s infinite; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+    .floaty .line { animation: floaty 3s ease-in-out infinite; }
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .glitch h1 { animation: glitch 0.4s infinite; }
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 #0ff, -2px 0 #f0f; }
+      50% { text-shadow: -2px 0 #0ff, 2px 0 #f0f; }
+      100% { text-shadow: 2px 0 #0ff, -2px 0 #f0f; }
     }
   </style>
 </head>
@@ -594,17 +629,19 @@
       </div>
     </div>
 
-    <!-- Hidden button -->
-    <div class="secret-btn" onclick="toggleSecretMenu()" title=""></div>
+    <div class="secret-btn" onclick="toggleSecretMenu()"></div>
 
-    <!-- Secret Menu -->
     <div class="secret-menu" id="secretMenu">
-      <button onclick="secretAction(1)">Option 1</button>
-      <button onclick="secretAction(2)">Option 2</button>
-      <button onclick="secretAction(3)">Option 3</button>
-      <button onclick="secretAction(4)">Option 4</button>
-      <button onclick="secretAction(5)">Option 5</button>
-      <button onclick="secretAction(6)">Reset</button>
+      <button onclick="secretAction('float')">Make lines float</button>
+      <button onclick="secretAction('shake')">Shake the page</button>
+      <button onclick="secretAction('glitch')">Glitch the title</button>
+      <button onclick="secretAction('bigtext')">Giant text mode</button>
+      <button onclick="secretAction('tiny')">Tiny text mode</button>
+      <button onclick="secretAction('spin')">Slow spin everything</button>
+      <button onclick="secretAction('confetti')">Spawn floating words</button>
+      <button onclick="secretAction('invert')">Invert colors</button>
+      <button onclick="secretAction('mirror')">Mirror the page</button>
+      <button onclick="secretAction('reset')">Reset all effects</button>
     </div>
   </div>
 
@@ -640,6 +677,15 @@
           <div class="actions">
             <button onclick="clearPrivate()">Clear All</button>
           </div>
+        </div>
+
+        <!-- Change Password Section -->
+        <div class="change-pass-box">
+          <p style="color:#aaa;margin-bottom:0.8rem;font-size:0.9rem;">Change Password</p>
+          <input type="password" id="newPassword" placeholder="New password" maxlength="30">
+          <input type="password" id="confirmPassword" placeholder="Confirm new password" maxlength="30">
+          <button class="primary" onclick="changePassword()" style="margin-top:0.8rem;width:100%;">Save New Password</button>
+          <p id="passMessage" style="margin-top:0.7rem;font-size:0.85rem;"></p>
         </div>
       </div>
     </div>
@@ -868,6 +914,30 @@
       }
     }
 
+    function changePassword() {
+      const newPass = document.getElementById("newPassword").value;
+      const confirm = document.getElementById("confirmPassword").value;
+      const msg = document.getElementById("passMessage");
+
+      if (!newPass) {
+        msg.style.color = "#c0392b";
+        msg.textContent = "Password cannot be empty";
+        return;
+      }
+      if (newPass !== confirm) {
+        msg.style.color = "#c0392b";
+        msg.textContent = "Passwords do not match";
+        return;
+      }
+
+      localStorage.setItem(PASS_KEY, newPass);
+      document.getElementById("newPassword").value = "";
+      document.getElementById("confirmPassword").value = "";
+      msg.style.color = "#7a9e7e";
+      msg.textContent = "Password updated successfully";
+      setTimeout(() => msg.textContent = "", 2500);
+    }
+
     function lockPrivateRoom() {
       document.getElementById("privateContent").style.display = "none";
       document.getElementById("passwordScreen").style.display = "block";
@@ -930,54 +1000,61 @@
       document.getElementById("notesModal").classList.remove("open");
     }
 
-    // ===== SECRET MENU =====
     function toggleSecretMenu() {
       document.getElementById("secretMenu").classList.toggle("open");
     }
 
-    function secretAction(num) {
+    function secretAction(action) {
       const goodPage = document.getElementById("goodPage");
-      const body = document.body;
+      const lines = document.querySelectorAll(".good-lines .line");
 
-      if (num === 1) {
-        goodPage.style.filter = goodPage.style.filter === "hue-rotate(180deg)" ? "" : "hue-rotate(180deg)";
+      if (action === "float") goodPage.classList.toggle("floaty");
+      if (action === "shake") goodPage.classList.toggle("shake");
+      if (action === "glitch") goodPage.classList.toggle("glitch");
+      if (action === "bigtext") {
+        lines.forEach(el => el.style.fontSize = el.style.fontSize === "1.6rem" ? "" : "1.6rem");
       }
-      if (num === 2) {
-        goodPage.style.filter = goodPage.style.filter === "grayscale(1)" ? "" : "grayscale(1)";
+      if (action === "tiny") {
+        lines.forEach(el => el.style.fontSize = el.style.fontSize === "0.75rem" ? "" : "0.75rem");
       }
-      if (num === 3) {
-        document.querySelectorAll(".good-lines .line").forEach(el => {
-          el.style.transition = "all 0.6s";
-          el.style.transform = el.style.transform === "scale(1.03)" ? "" : "scale(1.03)";
-        });
+      if (action === "spin") {
+        goodPage.style.transition = "transform 8s linear";
+        goodPage.style.transform = goodPage.style.transform === "rotate(360deg)" ? "" : "rotate(360deg)";
       }
-      if (num === 4) {
-        const tag = goodPage.querySelector(".tag");
-        if (tag.dataset.original) {
-          tag.textContent = tag.dataset.original;
-          delete tag.dataset.original;
-        } else {
-          tag.dataset.original = tag.textContent;
-          tag.textContent = "you are allowed to be gentle with yourself";
+      if (action === "confetti") {
+        for (let i = 0; i < 12; i++) {
+          const word = document.createElement("div");
+          word.textContent = ["you", "matter", "breathe", "rest", "okay", "here"][Math.floor(Math.random()*6)];
+          word.style.position = "fixed";
+          word.style.left = Math.random() * 90 + "%";
+          word.style.top = Math.random() * 80 + "%";
+          word.style.color = "#7ba3c9";
+          word.style.opacity = "0.5";
+          word.style.fontSize = "0.9rem";
+          word.style.pointerEvents = "none";
+          word.style.zIndex = "80";
+          word.style.transition = "all 4s ease";
+          document.body.appendChild(word);
+          setTimeout(() => {
+            word.style.top = "-50px";
+            word.style.opacity = "0";
+          }, 50);
+          setTimeout(() => word.remove(), 4200);
         }
       }
-      if (num === 5) {
-        goodPage.style.letterSpacing = goodPage.style.letterSpacing === "0.08em" ? "" : "0.08em";
+      if (action === "invert") {
+        goodPage.style.filter = goodPage.style.filter === "invert(1)" ? "" : "invert(1)";
       }
-      if (num === 6) {
+      if (action === "mirror") {
+        goodPage.style.transform = goodPage.style.transform === "scaleX(-1)" ? "" : "scaleX(-1)";
+      }
+      if (action === "reset") {
+        goodPage.classList.remove("floaty", "shake", "glitch");
         goodPage.style.filter = "";
-        goodPage.style.letterSpacing = "";
-        document.querySelectorAll(".good-lines .line").forEach(el => {
-          el.style.transform = "";
-        });
-        const tag = goodPage.querySelector(".tag");
-        if (tag.dataset.original) {
-          tag.textContent = tag.dataset.original;
-          delete tag.dataset.original;
-        }
+        goodPage.style.transform = "";
+        goodPage.style.transition = "";
+        lines.forEach(el => el.style.fontSize = "");
       }
-
-      document.getElementById("secretMenu").classList.remove("open");
     }
 
     document.getElementById("notesModal").addEventListener("click", function(e) {
