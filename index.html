@@ -1,1261 +1,809 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Put It To Rest</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #050505;
-      color: #c0392b;
-      font-family: "Segoe UI", system-ui, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-      transition: background 1.2s ease;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Put It To Rest</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050505;color:#c0392b;font-family:"Segoe UI",system-ui,sans-serif;min-height:100vh;overflow-x:hidden;transition:background 1.2s ease}
+body.weight-0 .bg{background:radial-gradient(ellipse at top,#1f0808 0%,#050505 65%)}
+body.weight-1 .bg{background:radial-gradient(ellipse at top,#1a0606 0%,#040404 65%)}
+body.weight-2 .bg{background:radial-gradient(ellipse at top,#150404 0%,#030303 65%)}
+body.weight-3 .bg{background:radial-gradient(ellipse at top,#100303 0%,#020202 65%)}
+body.weight-4 .bg{background:radial-gradient(ellipse at top,#0c0202 0%,#010101 65%)}
+.bg{position:fixed;inset:0;z-index:-2;transition:background 1.2s ease}
+.page{display:none}.page.active{display:block}
+.wrap{max-width:700px;margin:0 auto;padding:3.5rem 1.5rem 6rem;position:relative;z-index:1;transition:opacity 1.5s ease}
+header{text-align:center;margin-bottom:1.8rem}
+h1{font-size:clamp(2.1rem,5.5vw,2.9rem);font-weight:200;letter-spacing:.12em;text-transform:uppercase;color:#e74c3c;margin-bottom:.55rem;transition:text-shadow 1s ease}
+body.weight-0 h1{text-shadow:0 0 18px rgba(231,76,60,.3)}
+body.weight-1 h1{text-shadow:0 0 24px rgba(231,76,60,.4)}
+body.weight-2 h1{text-shadow:0 0 32px rgba(231,76,60,.5)}
+body.weight-3 h1{text-shadow:0 0 40px rgba(231,76,60,.6)}
+body.weight-4 h1{text-shadow:0 0 50px rgba(231,76,60,.75)}
+.tag{font-size:.95rem;color:#777;letter-spacing:.03em;font-weight:300;max-width:400px;margin:0 auto;line-height:1.55}
+.welcome{text-align:center;font-size:1.05rem;color:#c39a9a;margin:1.5rem auto .5rem;max-width:420px;line-height:1.5}
+.private-note{text-align:center;font-size:.75rem;color:#444;margin-top:1.1rem;letter-spacing:.06em}
+.nav{display:flex;justify-content:center;gap:.7rem;margin:2rem 0 .5rem;flex-wrap:wrap}
+.nav button{background:#1a1a1a;color:#999;border:1px solid #333;padding:.6rem 1.1rem;font-size:.8rem;border-radius:3px;cursor:pointer;transition:all .25s}
+.nav button:hover{background:#2a1515;color:#e8b4b4;border-color:#c0392b;transform:translateY(-2px)}
+.panel{max-height:0;overflow:hidden;transition:max-height .4s ease,opacity .35s ease,margin .3s;opacity:0;text-align:center}
+.panel.open{max-height:300px;opacity:1;margin:1rem 0 1.5rem}
+.panel-inner{background:rgba(20,8,8,.75);border:1px solid #3a1a1a;padding:1.4rem 1.3rem;border-radius:4px}
+.panel-inner p{color:#bbb;font-size:1.05rem;margin-bottom:.45rem}
+.panel-inner .snap{font-size:1.3rem;color:#e74c3c;font-weight:500}
+.panel-inner .compliment{font-size:1.25rem;color:#e8b4b4;line-height:1.5}
+.hotline{background:rgba(30,15,15,.85);border:1px solid #5a2020;padding:1rem;border-radius:4px}
+.hotline strong{display:block;color:#e74c3c;font-size:1.15rem;margin-bottom:.3rem}
+.hotline span{color:#aaa;font-size:.9rem}
+.stats{display:flex;justify-content:center;gap:2.2rem;margin:1.8rem 0 2.2rem;font-size:.8rem;color:#444}
+.stats span{color:#777}
+.lines{display:flex;flex-direction:column;gap:.85rem}
+.line{font-size:1.15rem;padding:.7rem 1rem;border-left:3px solid #3a1212;background:rgba(20,8,8,.45);transition:all .3s}
+.line:hover{background:rgba(55,18,18,.7);border-color:#c0392b;transform:translateX(5px)}
+.line.custom{border-left-color:#8e2a2a;color:#e67e7e}
+.controls{margin-top:3rem;display:flex;flex-direction:column;gap:1rem}
+.input-row{display:flex;gap:.6rem}
+input,textarea{flex:1;background:#111;border:1px solid #2a2a2a;color:#ddd;padding:.9rem 1.1rem;font-size:1rem;border-radius:3px;outline:none;transition:all .25s;font-family:inherit}
+input:focus,textarea:focus{border-color:#c0392b;box-shadow:0 0 0 3px rgba(192,57,43,.15)}
+textarea{min-height:120px;resize:vertical}
+button.primary{background:#8e2a2a;color:#fff;border:none;padding:0 1.5rem;font-size:.9rem;border-radius:3px;cursor:pointer;transition:all .25s}
+button.primary:hover{background:#c0392b;transform:translateY(-1px)}
+.actions{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+.actions button{background:#1a1a1a;color:#888;border:1px solid #333;padding:.55rem 1.1rem;font-size:.8rem;transition:all .25s}
+.actions button:hover{background:#222;color:#ccc;border-color:#555}
+.release-btn{margin-top:1.8rem;width:100%;background:transparent;border:1px solid #5a2020;color:#c0392b;padding:.9rem;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;border-radius:3px;cursor:pointer;transition:all .3s}
+.release-btn:hover{background:rgba(80,20,20,.35);border-color:#e74c3c;color:#e74c3c}
+.saved{color:#5a8f5a;font-size:.75rem;text-align:center;margin-top:.35rem;opacity:0;transition:opacity .3s}
+.saved.show{opacity:1}
+.release-message{display:none;text-align:center;padding:4rem 1rem;color:#666;font-size:1.15rem;line-height:1.7}
+.release-message.show{display:block}
+footer{margin-top:4rem;text-align:center;color:#2a2a2a;font-size:.75rem}
 
-    body.weight-0 .bg { background: radial-gradient(ellipse at top, #1f0808 0%, #050505 65%); }
-    body.weight-1 .bg { background: radial-gradient(ellipse at top, #1a0606 0%, #040404 65%); }
-    body.weight-2 .bg { background: radial-gradient(ellipse at top, #150404 0%, #030303 65%); }
-    body.weight-3 .bg { background: radial-gradient(ellipse at top, #100303 0%, #020202 65%); }
-    body.weight-4 .bg { background: radial-gradient(ellipse at top, #0c0202 0%, #010101 65%); }
+/* Good Things */
+.good-page{background:radial-gradient(ellipse at top,#0a1628 0%,#050505 70%)}
+.good-page h1{color:#7ba3c9;text-shadow:0 0 22px rgba(123,163,201,.35)}
+.good-page .tag{color:#6b8fad}
+.good-page .nav button:hover{background:#152030;color:#a8c5e0;border-color:#5a8ab5}
+.good-lines .line{border-left-color:#2a4a6a;background:rgba(12,25,40,.5);color:#a8c5e0}
+.good-lines .line:hover{background:rgba(20,40,65,.7);border-color:#7ba3c9}
+.good-page button.primary{background:#2a5080}
+.good-page button.primary:hover{background:#3a6a9e}
+.good-page input:focus{border-color:#5a8ab5;box-shadow:0 0 0 3px rgba(90,138,181,.2)}
+.good-page .saved{color:#7ba3c9}
 
-    .bg {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      transition: background 1.2s ease;
-    }
+/* Private Room */
+.private-room{background:radial-gradient(ellipse at top,#0d0a14 0%,#050505 70%)}
+.private-room h1{color:#9b7cb8;text-shadow:0 0 22px rgba(155,124,184,.35)}
+.private-room .tag{color:#7a6a8a}
+.private-room .nav button:hover{background:#1a1520;color:#c4b0d8;border-color:#7a5a9a}
+.private-lines .line{border-left-color:#4a3a5a;background:rgba(20,15,30,.5);color:#c4b0d8}
+.private-lines .line:hover{background:rgba(35,25,50,.7);border-color:#9b7cb8}
+.private-room button.primary{background:#5a3a7a}
+.private-room button.primary:hover{background:#7a5a9a}
+.private-room input:focus,.private-room textarea:focus{border-color:#7a5a9a;box-shadow:0 0 0 3px rgba(122,90,154,.2)}
 
-    .page { display: none; }
-    .page.active { display: block; }
+.end-of-day{display:none;margin-top:2.5rem;padding:1.5rem;background:rgba(20,10,10,.6);border:1px solid #3a1a1a;border-radius:4px}
+.end-of-day.show{display:block}
+.end-of-day h3{color:#c39a9a;font-weight:400;font-size:1.1rem;margin-bottom:.8rem;letter-spacing:.05em}
+.end-of-day textarea{width:100%;min-height:100px;margin-bottom:.8rem}
 
-    .wrap {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 3.5rem 1.5rem 6rem;
-      position: relative;
-      z-index: 1;
-      transition: opacity 1.5s ease;
-    }
+/* Floating Button */
+#floatBtn{position:fixed;bottom:30px;right:30px;width:44px;height:44px;background:#1a1a1a;border:1px solid #444;border-radius:50%;color:#888;font-size:1.15rem;cursor:grab;z-index:500;display:flex;align-items:center;justify-content:center;user-select:none;box-shadow:0 4px 18px rgba(0,0,0,.45);transition:background .2s,border-color .2s}
+#floatBtn:hover{background:#2a1515;border-color:#c0392b;color:#e8b4b4}
+#floatBtn:active{cursor:grabbing}
 
-    header { text-align: center; margin-bottom: 1.8rem; }
-    h1 {
-      font-size: clamp(2.1rem, 5.5vw, 2.9rem);
-      font-weight: 200;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #e74c3c;
-      margin-bottom: 0.55rem;
-      transition: text-shadow 1s ease;
-    }
-    body.weight-0 h1 { text-shadow: 0 0 18px rgba(231, 76, 60, 0.3); }
-    body.weight-1 h1 { text-shadow: 0 0 24px rgba(231, 76, 60, 0.4); }
-    body.weight-2 h1 { text-shadow: 0 0 32px rgba(231, 76, 60, 0.5); }
-    body.weight-3 h1 { text-shadow: 0 0 40px rgba(231, 76, 60, 0.6); }
-    body.weight-4 h1 { text-shadow: 0 0 50px rgba(231, 76, 60, 0.75); }
+/* Secret Menu */
+#secretMenu{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#0b0b0b;border:1px solid #333;border-radius:12px;width:340px;max-height:82vh;overflow-y:auto;z-index:600;box-shadow:0 12px 50px rgba(0,0,0,.7)}
+#secretMenu.open{display:block}
+.menu-header{padding:1rem 1.2rem;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0b0b0b;z-index:10}
+.menu-header h3{color:#c0392b;font-size:.95rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+.menu-close{background:none;border:none;color:#666;font-size:1.4rem;cursor:pointer;line-height:1}
+.menu-close:hover{color:#ccc}
+.menu-section{padding:.85rem 1.2rem;border-bottom:1px solid #1a1a1a}
+.menu-section:last-child{border-bottom:none}
+.menu-section h4{color:#555;font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.55rem}
+.menu-section button{display:block;width:100%;background:#141414;color:#aaa;border:1px solid #2a2a2a;padding:.48rem .75rem;margin-bottom:.32rem;font-size:.8rem;border-radius:4px;cursor:pointer;text-align:left;transition:all .2s}
+.menu-section button:hover{background:#1e1e1e;color:#eee;border-color:#444}
 
-    .tag {
-      font-size: 0.95rem;
-      color: #777;
-      letter-spacing: 0.03em;
-      font-weight: 300;
-      max-width: 400px;
-      margin: 0 auto;
-      line-height: 1.55;
-    }
-    .welcome {
-      text-align: center;
-      font-size: 1.05rem;
-      color: #c39a9a;
-      margin: 1.5rem auto 0.5rem;
-      max-width: 420px;
-      line-height: 1.5;
-    }
-    .private-note {
-      text-align: center;
-      font-size: 0.75rem;
-      color: #444;
-      margin-top: 1.1rem;
-      letter-spacing: 0.06em;
-    }
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;visibility:hidden;transition:all .3s}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{background:#0e0e0e;border:1px solid #333;max-width:520px;width:90%;padding:2.5rem 2rem;border-radius:6px;position:relative;max-height:85vh;overflow-y:auto}
+.modal h2{font-size:1.4rem;font-weight:400;color:#e74c3c;margin-bottom:1.4rem;letter-spacing:.08em;text-transform:uppercase}
+.modal p{color:#ccc;font-size:1.02rem;line-height:1.7;margin-bottom:1.1rem}
+.modal .close{position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:#777;font-size:1.5rem;cursor:pointer}
+.modal .close:hover{color:#ccc}
+.password-box{text-align:center;padding:3rem 1rem}
+.password-box input{max-width:260px;text-align:center;margin:1rem auto;display:block}
+.change-pass-box{margin-top:2rem;padding:1.2rem;background:rgba(20,15,30,.5);border:1px solid #3a2a4a;border-radius:4px;text-align:center}
+.change-pass-box input{max-width:220px;margin:.6rem auto;display:block;text-align:center}
 
-    .nav {
-      display: flex;
-      justify-content: center;
-      gap: 0.7rem;
-      margin: 2rem 0 0.5rem;
-      flex-wrap: wrap;
-    }
-    .nav button {
-      background: #1a1a1a;
-      color: #999;
-      border: 1px solid #333;
-      padding: 0.6rem 1.1rem;
-      font-size: 0.8rem;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: all 0.25s;
-    }
-    .nav button:hover {
-      background: #2a1515;
-      color: #e8b4b4;
-      border-color: #c0392b;
-      transform: translateY(-2px);
-    }
-
-    .panel {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease, opacity 0.35s ease, margin 0.3s;
-      opacity: 0;
-      text-align: center;
-    }
-    .panel.open {
-      max-height: 300px;
-      opacity: 1;
-      margin: 1rem 0 1.5rem;
-    }
-    .panel-inner {
-      background: rgba(20, 8, 8, 0.75);
-      border: 1px solid #3a1a1a;
-      padding: 1.4rem 1.3rem;
-      border-radius: 4px;
-    }
-    .panel-inner p { color: #bbb; font-size: 1.05rem; margin-bottom: 0.45rem; }
-    .panel-inner .snap { font-size: 1.3rem; color: #e74c3c; font-weight: 500; }
-    .panel-inner .compliment { font-size: 1.25rem; color: #e8b4b4; line-height: 1.5; }
-
-    .hotline {
-      background: rgba(30, 15, 15, 0.85);
-      border: 1px solid #5a2020;
-      padding: 1rem;
-      border-radius: 4px;
-    }
-    .hotline strong { display: block; color: #e74c3c; font-size: 1.15rem; margin-bottom: 0.3rem; }
-    .hotline span { color: #aaa; font-size: 0.9rem; }
-
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 2.2rem;
-      margin: 1.8rem 0 2.2rem;
-      font-size: 0.8rem;
-      color: #444;
-    }
-    .stats span { color: #777; }
-
-    .lines { display: flex; flex-direction: column; gap: 0.85rem; }
-    .line {
-      font-size: 1.15rem;
-      padding: 0.7rem 1rem;
-      border-left: 3px solid #3a1212;
-      background: rgba(20, 8, 8, 0.45);
-      transition: all 0.3s;
-    }
-    .line:hover {
-      background: rgba(55, 18, 18, 0.7);
-      border-color: #c0392b;
-      transform: translateX(5px);
-    }
-    .line.custom {
-      border-left-color: #8e2a2a;
-      color: #e67e7e;
-    }
-
-    .controls {
-      margin-top: 3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .input-row { display: flex; gap: 0.6rem; }
-    input, textarea {
-      flex: 1;
-      background: #111;
-      border: 1px solid #2a2a2a;
-      color: #ddd;
-      padding: 0.9rem 1.1rem;
-      font-size: 1rem;
-      border-radius: 3px;
-      outline: none;
-      transition: all 0.25s;
-      font-family: inherit;
-    }
-    input:focus, textarea:focus {
-      border-color: #c0392b;
-      box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
-    }
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    button.primary {
-      background: #8e2a2a;
-      color: #fff;
-      border: none;
-      padding: 0 1.5rem;
-      font-size: 0.9rem;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: all 0.25s;
-    }
-    button.primary:hover {
-      background: #c0392b;
-      transform: translateY(-1px);
-    }
-
-    .actions {
-      display: flex;
-      gap: 0.7rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .actions button {
-      background: #1a1a1a;
-      color: #888;
-      border: 1px solid #333;
-      padding: 0.55rem 1.1rem;
-      font-size: 0.8rem;
-      transition: all 0.25s;
-    }
-    .actions button:hover {
-      background: #222;
-      color: #ccc;
-      border-color: #555;
-    }
-
-    .release-btn {
-      margin-top: 1.8rem;
-      width: 100%;
-      background: transparent;
-      border: 1px solid #5a2020;
-      color: #c0392b;
-      padding: 0.9rem;
-      font-size: 0.9rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .release-btn:hover {
-      background: rgba(80, 20, 20, 0.35);
-      border-color: #e74c3c;
-      color: #e74c3c;
-    }
-
-    .saved {
-      color: #5a8f5a;
-      font-size: 0.75rem;
-      text-align: center;
-      margin-top: 0.35rem;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .saved.show { opacity: 1; }
-
-    .release-message {
-      display: none;
-      text-align: center;
-      padding: 4rem 1rem;
-      color: #666;
-      font-size: 1.15rem;
-      line-height: 1.7;
-    }
-    .release-message.show { display: block; }
-
-    footer {
-      margin-top: 4rem;
-      text-align: center;
-      color: #2a2a2a;
-      font-size: 0.75rem;
-    }
-
-    /* Good Things */
-    .good-page { background: radial-gradient(ellipse at top, #0a1628 0%, #050505 70%); }
-    .good-page h1 { color: #7ba3c9; text-shadow: 0 0 22px rgba(123, 163, 201, 0.35); }
-    .good-page .tag { color: #6b8fad; }
-    .good-page .nav button:hover { background: #152030; color: #a8c5e0; border-color: #5a8ab5; }
-    .good-lines .line { border-left-color: #2a4a6a; background: rgba(12, 25, 40, 0.5); color: #a8c5e0; }
-    .good-lines .line:hover { background: rgba(20, 40, 65, 0.7); border-color: #7ba3c9; }
-    .good-page button.primary { background: #2a5080; }
-    .good-page button.primary:hover { background: #3a6a9e; }
-    .good-page input:focus { border-color: #5a8ab5; box-shadow: 0 0 0 3px rgba(90, 138, 181, 0.2); }
-    .good-page .saved { color: #7ba3c9; }
-
-    /* Private Room */
-    .private-room { background: radial-gradient(ellipse at top, #0d0a14 0%, #050505 70%); }
-    .private-room h1 { color: #9b7cb8; text-shadow: 0 0 22px rgba(155, 124, 184, 0.35); }
-    .private-room .tag { color: #7a6a8a; }
-    .private-room .nav button:hover { background: #1a1520; color: #c4b0d8; border-color: #7a5a9a; }
-    .private-lines .line { border-left-color: #4a3a5a; background: rgba(20, 15, 30, 0.5); color: #c4b0d8; }
-    .private-lines .line:hover { background: rgba(35, 25, 50, 0.7); border-color: #9b7cb8; }
-    .private-room button.primary { background: #5a3a7a; }
-    .private-room button.primary:hover { background: #7a5a9a; }
-    .private-room input:focus, .private-room textarea:focus { border-color: #7a5a9a; box-shadow: 0 0 0 3px rgba(122, 90, 154, 0.2); }
-
-    .end-of-day {
-      display: none;
-      margin-top: 2.5rem;
-      padding: 1.5rem;
-      background: rgba(20, 10, 10, 0.6);
-      border: 1px solid #3a1a1a;
-      border-radius: 4px;
-    }
-    .end-of-day.show { display: block; }
-    .end-of-day h3 {
-      color: #c39a9a;
-      font-weight: 400;
-      font-size: 1.1rem;
-      margin-bottom: 0.8rem;
-      letter-spacing: 0.05em;
-    }
-    .end-of-day textarea {
-      width: 100%;
-      min-height: 100px;
-      margin-bottom: 0.8rem;
-    }
-
-    /* ===== FLOATING DRAGGABLE BUTTON ===== */
-    #floatBtn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 42px;
-      height: 42px;
-      background: #1a1a1a;
-      border: 1px solid #444;
-      border-radius: 50%;
-      color: #888;
-      font-size: 1.1rem;
-      cursor: grab;
-      z-index: 300;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      user-select: none;
-      transition: background 0.2s, border-color 0.2s;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    }
-    #floatBtn:hover {
-      background: #2a1515;
-      border-color: #c0392b;
-      color: #e8b4b4;
-    }
-    #floatBtn:active {
-      cursor: grabbing;
-    }
-
-    /* ===== COMPLEX SECRET MENU ===== */
-    #secretMenu {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #0c0c0c;
-      border: 1px solid #333;
-      border-radius: 10px;
-      width: 320px;
-      max-height: 80vh;
-      overflow-y: auto;
-      z-index: 400;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      padding: 0;
-    }
-    #secretMenu.open {
-      display: block;
-    }
-    .menu-header {
-      padding: 1rem 1.2rem;
-      border-bottom: 1px solid #222;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      background: #0c0c0c;
-      z-index: 10;
-    }
-    .menu-header h3 {
-      color: #c0392b;
-      font-size: 0.95rem;
-      font-weight: 400;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .menu-close {
-      background: none;
-      border: none;
-      color: #666;
-      font-size: 1.3rem;
-      cursor: pointer;
-      line-height: 1;
-    }
-    .menu-close:hover { color: #ccc; }
-
-    .menu-section {
-      padding: 0.8rem 1.2rem;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    .menu-section:last-child { border-bottom: none; }
-    .menu-section h4 {
-      color: #555;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 0.6rem;
-    }
-    .menu-section button {
-      display: block;
-      width: 100%;
-      background: #151515;
-      color: #aaa;
-      border: 1px solid #2a2a2a;
-      padding: 0.5rem 0.8rem;
-      margin-bottom: 0.35rem;
-      font-size: 0.82rem;
-      border-radius: 4px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
-    }
-    .menu-section button:hover {
-      background: #1f1f1f;
-      color: #eee;
-      border-color: #444;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s;
-    }
-    .modal-overlay.open {
-      opacity: 1;
-      visibility: visible;
-    }
-    .modal {
-      background: #0e0e0e;
-      border: 1px solid #333;
-      max-width: 520px;
-      width: 90%;
-      padding: 2.5rem 2rem;
-      border-radius: 6px;
-      position: relative;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-    .modal h2 {
-      font-size: 1.4rem;
-      font-weight: 400;
-      color: #e74c3c;
-      margin-bottom: 1.4rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .modal p {
-      color: #ccc;
-      font-size: 1.02rem;
-      line-height: 1.7;
-      margin-bottom: 1.1rem;
-    }
-    .modal .close {
-      position: absolute;
-      top: 1rem;
-      right: 1.2rem;
-      background: none;
-      border: none;
-      color: #777;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    .modal .close:hover { color: #ccc; }
-
-    .password-box {
-      text-align: center;
-      padding: 3rem 1rem;
-    }
-    .password-box input {
-      max-width: 260px;
-      text-align: center;
-      margin: 1rem auto;
-      display: block;
-    }
-
-    .change-pass-box {
-      margin-top: 2rem;
-      padding: 1.2rem;
-      background: rgba(20, 15, 30, 0.5);
-      border: 1px solid #3a2a4a;
-      border-radius: 4px;
-      text-align: center;
-    }
-    .change-pass-box input {
-      max-width: 220px;
-      margin: 0.6rem auto;
-      display: block;
-      text-align: center;
-    }
-
-    /* Effects */
-    .shake { animation: shake 0.5s infinite; }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-4px); }
-      75% { transform: translateX(4px); }
-    }
-    .floaty .line { animation: floaty 3s ease-in-out infinite; }
-    @keyframes floaty {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .glitch h1 { animation: glitch 0.4s infinite; }
-    @keyframes glitch {
-      0% { text-shadow: 2px 0 #0ff, -2px 0 #f0f; }
-      50% { text-shadow: -2px 0 #0ff, 2px 0 #f0f; }
-      100% { text-shadow: 2px 0 #0ff, -2px 0 #f0f; }
-    }
-    .pulse-bg { animation: pulseBg 2s ease-in-out infinite; }
-    @keyframes pulseBg {
-      0%, 100% { filter: brightness(1); }
-      50% { filter: brightness(1.3); }
-    }
-    .rainbow-text h1 {
-      background: linear-gradient(90deg, #ff0000, #ff7700, #ffff00, #00ff00, #0099ff, #6600ff, #ff00ff);
-      background-size: 400%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: rainbow 4s linear infinite;
-    }
-    @keyframes rainbow {
-      0% { background-position: 0%; }
-      100% { background-position: 400%; }
-    }
-    .matrix { color: #0f0 !important; text-shadow: 0 0 5px #0f0; }
-    .vhs {
-      animation: vhs 0.15s infinite;
-    }
-    @keyframes vhs {
-      0% { filter: none; }
-      20% { filter: hue-rotate(90deg); }
-      40% { filter: hue-rotate(180deg); }
-      60% { filter: hue-rotate(270deg); }
-      80% { filter: contrast(1.5); }
-    }
-  </style>
+/* Effect classes */
+.shake{animation:shake .5s infinite}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.floaty .line{animation:floaty 3s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.glitch h1{animation:glitch .4s infinite}
+@keyframes glitch{0%{text-shadow:2px 0 #0ff,-2px 0 #f0f}50%{text-shadow:-2px 0 #0ff,2px 0 #f0f}100%{text-shadow:2px 0 #0ff,-2px 0 #f0f}}
+.pulse-bg{animation:pulseBg 2s ease-in-out infinite}
+@keyframes pulseBg{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
+.rainbow-text h1{background:linear-gradient(90deg,#ff0000,#ff7700,#ffff00,#00ff00,#0099ff,#6600ff,#ff00ff);background-size:400%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbow 4s linear infinite}
+@keyframes rainbow{0%{background-position:0%}100%{background-position:400%}}
+.vhs{animation:vhs .15s infinite}
+@keyframes vhs{0%{filter:none}25%{filter:hue-rotate(90deg)}50%{filter:hue-rotate(180deg)}75%{filter:contrast(1.4)}}
+.matrix{color:#0f0!important;text-shadow:0 0 6px #0f0}
+.fog::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(20,0,0,.55) 100%);pointer-events:none;z-index:50;animation:fogMove 12s ease-in-out infinite alternate}
+@keyframes fogMove{0%{opacity:.6}100%{opacity:.9}}
+.scanlines::after{content:"";position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none;z-index:40}
+.heartbeat{animation:heartbeat 1.8s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.03)}30%{transform:scale(1)}}
+.flicker{animation:flicker 4s infinite}
+@keyframes flicker{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.7}94%{opacity:1}96%{opacity:.4}97%{opacity:1}}
+.bleed .line{text-shadow:0 4px 8px rgba(192,57,43,.4)}
+.ghost .line{opacity:.35;filter:blur(.6px)}
+.handwritten{font-family:"Segoe Print","Comic Sans MS",cursive!important}
+</style>
 </head>
 <body class="weight-0">
-  <div class="bg"></div>
+<div class="bg"></div>
 
-  <!-- MAIN PAGE -->
-  <div class="page active" id="mainPage">
-    <div class="wrap" id="mainWrap">
-      <header>
-        <h1>Put It To Rest</h1>
-        <div class="tag">a place where you can put your thoughts to rest</div>
-        <div class="welcome">remember you deserve to live another day</div>
-        <div class="private-note">This page only exists on your device</div>
-      </header>
+<!-- MAIN PAGE -->
+<div class="page active" id="mainPage">
+  <div class="wrap" id="mainWrap">
+    <header>
+      <h1>Put It To Rest</h1>
+      <div class="tag">a place where you can put your thoughts to rest</div>
+      <div class="welcome">remember you deserve to live another day</div>
+      <div class="private-note">This page only exists on your device</div>
+    </header>
 
-      <div class="nav">
-        <button onclick="openNotes()">Creator’s Notes</button>
-        <button onclick="toggleContact()">Contact Me</button>
-        <button onclick="toggleHelp()">Need Help?</button>
-        <button onclick="showCompliment()">Kind Words</button>
-        <button onclick="showGoodPage()">Good Things</button>
-        <button onclick="showPrivateRoom()">Private Room</button>
+    <div class="nav">
+      <button onclick="openNotes()">Creator’s Notes</button>
+      <button onclick="toggleContact()">Contact Me</button>
+      <button onclick="toggleHelp()">Need Help?</button>
+      <button onclick="showCompliment()">Kind Words</button>
+      <button onclick="showGoodPage()">Good Things</button>
+      <button onclick="showPrivateRoom()">Private Room</button>
+    </div>
+
+    <div class="panel" id="contactPanel">
+      <div class="panel-inner">
+        <p>You can reach me here:</p>
+        <div class="snap">Snapchat: bentley67_420</div>
       </div>
+    </div>
 
-      <div class="panel" id="contactPanel">
-        <div class="panel-inner">
-          <p>You can reach me here:</p>
-          <div class="snap">Snapchat: bentley67_420</div>
+    <div class="panel" id="helpPanel">
+      <div class="panel-inner">
+        <div class="hotline">
+          <strong>988 Suicide & Crisis Lifeline</strong>
+          <span>Call or text 988 (United States) — 24/7, free, and confidential</span>
         </div>
       </div>
+    </div>
 
-      <div class="panel" id="helpPanel">
-        <div class="panel-inner">
-          <div class="hotline">
-            <strong>988 Suicide & Crisis Lifeline</strong>
-            <span>Call or text 988 (United States) — 24/7, free, and confidential</span>
-          </div>
-        </div>
+    <div class="panel" id="complimentPanel">
+      <div class="panel-inner">
+        <div class="compliment" id="complimentText">You are good enough.</div>
       </div>
+    </div>
 
-      <div class="panel" id="complimentPanel">
-        <div class="panel-inner">
-          <div class="compliment" id="complimentText">You are good enough.</div>
-        </div>
+    <div class="stats" id="stats">
+      <div><span id="count">0</span> lines</div>
+      <div><span id="customCount">0</span> yours</div>
+    </div>
+
+    <div class="lines" id="lines"></div>
+
+    <div class="release-message" id="releaseMessage">
+      You let it go.<br><br>
+      The words are gone.<br>
+      You can begin again whenever you’re ready.
+    </div>
+
+    <div class="controls" id="controls">
+      <div class="input-row">
+        <input type="text" id="newLine" placeholder="Write something and press Enter..." maxlength="140" autocomplete="off">
+        <button class="primary" onclick="add()">Add</button>
       </div>
-
-      <div class="stats" id="stats">
-        <div><span id="count">0</span> lines</div>
-        <div><span id="customCount">0</span> yours</div>
+      <div class="saved" id="savedMsg">Saved</div>
+      <div class="actions">
+        <button onclick="randomHighlight()">Highlight Random</button>
+        <button onclick="clearCustom()">Clear Mine</button>
+        <button onclick="clearAllSaved()">Delete Saved</button>
       </div>
+      <button class="release-btn" onclick="releaseAll()">Release Everything</button>
+    </div>
 
-      <div class="lines" id="lines"></div>
+    <div class="end-of-day" id="endOfDay">
+      <h3>End of Day Note</h3>
+      <textarea id="endNote" placeholder="How are you ending the day..."></textarea>
+      <button class="primary" onclick="saveEndNote()" style="width:100%">Save Note</button>
+      <div class="saved" id="endSaved">Saved</div>
+    </div>
 
-      <div class="release-message" id="releaseMessage">
-        You let it go.<br><br>
-        The words are gone.<br>
-        You can begin again whenever you’re ready.
+    <footer>Nothing is uploaded • Nothing is shared • Close the tab when you’re finished</footer>
+  </div>
+</div>
+
+<!-- GOOD THINGS -->
+<div class="page good-page" id="goodPage">
+  <div class="wrap">
+    <header>
+      <h1>Good Things</h1>
+      <div class="tag">a quieter place to write kind things to yourself</div>
+    </header>
+    <div class="nav"><button onclick="showMainPage()">← Back</button></div>
+    <div class="lines good-lines" id="goodLines"></div>
+    <div class="controls">
+      <div class="input-row">
+        <input type="text" id="goodInput" placeholder="Write something kind..." maxlength="140" autocomplete="off">
+        <button class="primary" onclick="addGood()">Add</button>
       </div>
-
-      <div class="controls" id="controls">
-        <div class="input-row">
-          <input type="text" id="newLine" placeholder="Write something and press Enter..." maxlength="140" autocomplete="off">
-          <button class="primary" onclick="add()">Add</button>
-        </div>
-        <div class="saved" id="savedMsg">Saved</div>
-        <div class="actions">
-          <button onclick="randomHighlight()">Highlight Random</button>
-          <button onclick="clearCustom()">Clear Mine</button>
-          <button onclick="clearAllSaved()">Delete Saved</button>
-        </div>
-        <button class="release-btn" onclick="releaseAll()">Release Everything</button>
-      </div>
-
-      <div class="end-of-day" id="endOfDay">
-        <h3>End of Day Note</h3>
-        <textarea id="endNote" placeholder="How are you ending the day..."></textarea>
-        <button class="primary" onclick="saveEndNote()" style="width:100%">Save Note</button>
-        <div class="saved" id="endSaved">Saved</div>
-      </div>
-
-      <footer>Nothing is uploaded • Nothing is shared • Close the tab when you’re finished</footer>
+      <div class="saved" id="goodSaved">Saved</div>
+      <div class="actions"><button onclick="clearGood()">Clear All</button></div>
     </div>
   </div>
+</div>
 
-  <!-- GOOD THINGS PAGE -->
-  <div class="page good-page" id="goodPage">
-    <div class="wrap">
+<!-- PRIVATE ROOM -->
+<div class="page private-room" id="privatePage">
+  <div class="wrap">
+    <div id="passwordScreen" class="password-box">
+      <h1>Private Room</h1>
+      <p style="color:#888;margin:1rem 0 1.5rem">Enter the password to enter</p>
+      <input type="password" id="passwordInput" placeholder="Password" maxlength="30">
+      <button class="primary" onclick="checkPassword()" style="margin-top:1rem">Enter</button>
+      <p id="passwordError" style="color:#c0392b;margin-top:1rem;display:none">Wrong password</p>
+      <br><br>
+      <button onclick="showMainPage()" style="background:none;border:none;color:#666;cursor:pointer">← Back</button>
+    </div>
+
+    <div id="privateContent" style="display:none">
       <header>
-        <h1>Good Things</h1>
-        <div class="tag">a quieter place to write kind things to yourself</div>
+        <h1>Private Room</h1>
+        <div class="tag">a locked space only you can open</div>
       </header>
       <div class="nav">
         <button onclick="showMainPage()">← Back</button>
+        <button onclick="lockPrivateRoom()">Lock Room</button>
       </div>
-      <div class="lines good-lines" id="goodLines"></div>
+      <div class="lines private-lines" id="privateLines"></div>
       <div class="controls">
         <div class="input-row">
-          <input type="text" id="goodInput" placeholder="Write something kind..." maxlength="140" autocomplete="off">
-          <button class="primary" onclick="addGood()">Add</button>
+          <input type="text" id="privateInput" placeholder="Write something only you will see..." maxlength="140" autocomplete="off">
+          <button class="primary" onclick="addPrivate()">Add</button>
         </div>
-        <div class="saved" id="goodSaved">Saved</div>
-        <div class="actions">
-          <button onclick="clearGood()">Clear All</button>
-        </div>
+        <div class="saved" id="privateSaved">Saved</div>
+        <div class="actions"><button onclick="clearPrivate()">Clear All</button></div>
+      </div>
+      <div class="change-pass-box">
+        <p style="color:#aaa;margin-bottom:.8rem;font-size:.9rem">Change Password</p>
+        <input type="password" id="newPassword" placeholder="New password" maxlength="30">
+        <input type="password" id="confirmPassword" placeholder="Confirm new password" maxlength="30">
+        <button class="primary" onclick="changePassword()" style="margin-top:.8rem;width:100%">Save New Password</button>
+        <p id="passMessage" style="margin-top:.7rem;font-size:.85rem"></p>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- PRIVATE ROOM -->
-  <div class="page private-room" id="privatePage">
-    <div class="wrap">
-      <div id="passwordScreen" class="password-box">
-        <h1>Private Room</h1>
-        <p style="color:#888;margin:1rem 0 1.5rem;">Enter the password to enter</p>
-        <input type="password" id="passwordInput" placeholder="Password" maxlength="30">
-        <button class="primary" onclick="checkPassword()" style="margin-top:1rem;">Enter</button>
-        <p id="passwordError" style="color:#c0392b;margin-top:1rem;display:none;">Wrong password</p>
-        <br><br>
-        <button onclick="showMainPage()" style="background:none;border:none;color:#666;cursor:pointer;">← Back</button>
-      </div>
+<!-- FLOATING BUTTON -->
+<div id="floatBtn" title="Drag me • Click to open">☰</div>
 
-      <div id="privateContent" style="display:none;">
-        <header>
-          <h1>Private Room</h1>
-          <div class="tag">a locked space only you can open</div>
-        </header>
-        <div class="nav">
-          <button onclick="showMainPage()">← Back</button>
-          <button onclick="lockPrivateRoom()">Lock Room</button>
-        </div>
-        <div class="lines private-lines" id="privateLines"></div>
-        <div class="controls">
-          <div class="input-row">
-            <input type="text" id="privateInput" placeholder="Write something only you will see..." maxlength="140" autocomplete="off">
-            <button class="primary" onclick="addPrivate()">Add</button>
-          </div>
-          <div class="saved" id="privateSaved">Saved</div>
-          <div class="actions">
-            <button onclick="clearPrivate()">Clear All</button>
-          </div>
-        </div>
-
-        <div class="change-pass-box">
-          <p style="color:#aaa;margin-bottom:0.8rem;font-size:0.9rem;">Change Password</p>
-          <input type="password" id="newPassword" placeholder="New password" maxlength="30">
-          <input type="password" id="confirmPassword" placeholder="Confirm new password" maxlength="30">
-          <button class="primary" onclick="changePassword()" style="margin-top:0.8rem;width:100%;">Save New Password</button>
-          <p id="passMessage" style="margin-top:0.7rem;font-size:0.85rem;"></p>
-        </div>
-      </div>
-    </div>
+<!-- SECRET MENU -->
+<div id="secretMenu">
+  <div class="menu-header">
+    <h3>Dev Menu</h3>
+    <button class="menu-close" onclick="toggleSecretMenu()">×</button>
   </div>
 
-  <!-- FLOATING BUTTON -->
-  <div id="floatBtn" title="Drag me • Click to open menu">☰</div>
-
-  <!-- COMPLEX SECRET MENU -->
-  <div id="secretMenu">
-    <div class="menu-header">
-      <h3>Dev Menu</h3>
-      <button class="menu-close" onclick="toggleSecretMenu()">×</button>
-    </div>
-
-    <div class="menu-section">
-      <h4>Motion</h4>
-      <button onclick="secretAction('float')">Make lines float</button>
-      <button onclick="secretAction('shake')">Shake everything</button>
-      <button onclick="secretAction('spin')">Slow spin page</button>
-      <button onclick="secretAction('bounce')">Bounce lines</button>
-      <button onclick="secretAction('wave')">Wave text</button>
-    </div>
-
-    <div class="menu-section">
-      <h4>Visual Effects</h4>
-      <button onclick="secretAction('glitch')">Glitch title</button>
-      <button onclick="secretAction('invert')">Invert colors</button>
-      <button onclick="secretAction('mirror')">Mirror page</button>
-      <button onclick="secretAction('pulse')">Pulse background</button>
-      <button onclick="secretAction('rainbow')">Rainbow title</button>
-      <button onclick="secretAction('vhs')">VHS effect</button>
-      <button onclick="secretAction('matrix')">Matrix mode</button>
-      <button onclick="secretAction('blur')">Blur everything</button>
-    </div>
-
-    <div class="menu-section">
-      <h4>Text</h4>
-      <button onclick="secretAction('bigtext')">Giant text</button>
-      <button onclick="secretAction('tiny')">Tiny text</button>
-      <button onclick="secretAction('spacing')">Wide letter spacing</button>
-      <button onclick="secretAction('comic')">Comic font</button>
-    </div>
-
-    <div class="menu-section">
-      <h4>Chaos</h4>
-      <button onclick="secretAction('confetti')">Spawn floating words</button>
-      <button onclick="secretAction('rain')">Text rain</button>
-      <button onclick="secretAction('explode')">Explode lines</button>
-      <button onclick="secretAction('random')">Random chaos</button>
-    </div>
-
-    <div class="menu-section">
-      <h4>UI Control</h4>
-      <button onclick="secretAction('hideui')">Hide all UI</button>
-      <button onclick="secretAction('showui')">Show all UI</button>
-      <button onclick="secretAction('zoom')">Zoom in</button>
-      <button onclick="secretAction('darker')">Force darkest</button>
-      <button onclick="secretAction('lighter')">Force lightest</button>
-    </div>
-
-    <div class="menu-section">
-      <h4>System</h4>
-      <button onclick="secretAction('reset')">Reset all effects</button>
-    </div>
+  <div class="menu-section">
+    <h4>Motion</h4>
+    <button onclick="secretAction('float')">Make lines float</button>
+    <button onclick="secretAction('shake')">Shake everything</button>
+    <button onclick="secretAction('spin')">Slow spin page</button>
+    <button onclick="secretAction('bounce')">Bounce lines</button>
+    <button onclick="secretAction('wave')">Wave text</button>
+    <button onclick="secretAction('heartbeat')">Heartbeat pulse</button>
+    <button onclick="secretAction('sway')">Gentle sway</button>
   </div>
 
-  <div class="modal-overlay" id="notesModal">
-    <div class="modal">
-      <button class="close" onclick="closeNotes()">&times;</button>
-      <h2>Creator’s Notes</h2>
-      <p>Hello, my name is Bentley.</p>
-      <p>I created this when I was 15. I had been struggling with my mental health for a long time and never felt comfortable opening up to the people around me. Talking about the heavier things always felt impossible, so I decided to build a place where those thoughts could exist without an audience.</p>
-      <p>I’m still struggling with my mental health. Some days are heavier than others, and I don’t have it all figured out. This page is something I made in the middle of that, not after it was over.</p>
-      <p>This site is completely private. Nothing you write is uploaded or shared. Everything stays only on your device. I made it this way on purpose — so it could feel safe.</p>
-      <p>I’m really proud of this page. It means more to me than I can fully explain. It started as something small I made for myself, and watching it become a space that others might also find useful has been one of the few things that’s made me feel like I actually created something that matters.</p>
-      <p>You can write the short, sharp things that sit in your chest, and you can also choose to release them when you’re ready. Holding on is allowed. Letting go is allowed too.</p>
-      <p>I don’t claim this is a solution. It’s just a quiet corner of the internet I wish I had when I was younger. A place to be honest without having to perform strength for anyone else.</p>
-      <p>If you are in crisis, please reach out for real support. In the United States you can call or text <strong>988</strong>. You deserve help that goes beyond a webpage.</p>
-      <p>Thank you for being here.</p>
-    </div>
+  <div class="menu-section">
+    <h4>Atmosphere</h4>
+    <button onclick="secretAction('fog')">Soft red fog</button>
+    <button onclick="secretAction('scanlines')">Scanlines</button>
+    <button onclick="secretAction('flicker')">Candle flicker</button>
+    <button onclick="secretAction('grain')">Film grain</button>
+    <button onclick="secretAction('embers')">Floating embers</button>
+    <button onclick="secretAction('ash')">Falling ash</button>
   </div>
 
-  <script data-goatcounter="https://mentallyunstable69420.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
+  <div class="menu-section">
+    <h4>Visual Distortion</h4>
+    <button onclick="secretAction('glitch')">Glitch title</button>
+    <button onclick="secretAction('invert')">Invert colors</button>
+    <button onclick="secretAction('mirror')">Mirror page</button>
+    <button onclick="secretAction('pulse')">Pulse brightness</button>
+    <button onclick="secretAction('rainbow')">Rainbow title</button>
+    <button onclick="secretAction('vhs')">VHS distortion</button>
+    <button onclick="secretAction('matrix')">Matrix mode</button>
+    <button onclick="secretAction('blur')">Soft blur</button>
+    <button onclick="secretAction('chromatic')">Chromatic split</button>
+    <button onclick="secretAction('tear')">Screen tear</button>
+  </div>
 
-  <script>
-    const STORAGE_KEY = "putittorest_custom_lines";
-    const GOOD_KEY = "putittorest_good_lines";
-    const PRIVATE_KEY = "putittorest_private_lines";
-    const END_KEY = "putittorest_end_note";
-    const PASS_KEY = "putittorest_password";
-    const DEFAULT_PASSWORD = "rest";
+  <div class="menu-section">
+    <h4>Text Effects</h4>
+    <button onclick="secretAction('bigtext')">Giant text</button>
+    <button onclick="secretAction('tiny')">Tiny text</button>
+    <button onclick="secretAction('spacing')">Wide spacing</button>
+    <button onclick="secretAction('handwritten')">Handwritten style</button>
+    <button onclick="secretAction('bleed')">Text bleed</button>
+    <button onclick="secretAction('ghost')">Ghost text</button>
+    <button onclick="secretAction('scramble')">Scramble letters</button>
+    <button onclick="secretAction('typewriter')">Typewriter reveal</button>
+    <button onclick="secretAction('echo')">Echo lines</button>
+  </div>
 
-    const base = ["I'm a failure","I hate myself","I'm worthless","Nothing I do is ever good enough","I'm a disappointment","I can't do anything right","Everyone would be better off without me","I'm just taking up space","I hate how I look","I hate how I sound","I hate everything about me","I'm so tired of being me","I keep messing everything up","I don't deserve good things","I'm broken","No one actually cares","I'm invisible","I'm a burden","I ruin everything I touch","I'm not strong enough","I'm not smart enough","I'm not good enough","I hate my life","I hate waking up","I feel empty all the time","I'm stuck and I'll never get out","I'm a waste of potential","I'm a waste of time","I'm a waste of space","I don't matter","I'm exhausted of pretending","I'm falling behind everyone","I have no real friends","I'm the problem","I make people tired","I talk too much and say nothing","I should be better by now","I'm running out of reasons","I feel nothing most days","I'm scared of myself","I don't trust my own mind","I'm tired of hoping","I feel like giving up","No one understands me","I'm always the second choice","I push everyone away","I'm too much and not enough at the same time","I fake being okay every day","I don't know who I am anymore","I'm drowning and no one notices","I wish I could start over","I'm ashamed of who I am","I feel completely alone","I don't belong anywhere","I'm tired of fighting myself","I hate the person in the mirror","Nothing feels real anymore","I'm losing myself","I don't see a future","I'm just existing, not living"];
-    const compliments = ["You are good enough.","You are trying, and that matters.","It’s okay to feel this way.","You deserve rest.","You are not a burden.","You are allowed to take up space.","You are doing the best you can.","You matter.","It’s okay to not be okay.","You are stronger than you feel right now.","You don’t have to fix everything today.","You are worthy of kindness.","Your feelings are valid.","You are not alone in this.","It’s okay to ask for help.","You have survived hard days before.","You are more than your worst thoughts.","You deserve gentleness, especially from yourself.","This moment does not define you.","You are allowed to rest without earning it."];
+  <div class="menu-section">
+    <h4>Chaos & Weird</h4>
+    <button onclick="secretAction('confetti')">Spawn floating words</button>
+    <button onclick="secretAction('rain')">Text rain</button>
+    <button onclick="secretAction('explode')">Explode lines</button>
+    <button onclick="secretAction('gravity')">Gravity fall</button>
+    <button onclick="secretAction('orbit')">Orbit lines</button>
+    <button onclick="secretAction('whisper')">Whisper fragments</button>
+    <button onclick="secretAction('random')">Random chaos</button>
+  </div>
 
-    let custom = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    let goodLines = JSON.parse(localStorage.getItem(GOOD_KEY) || "[]");
-    let privateLines = JSON.parse(localStorage.getItem(PRIVATE_KEY) || "[]");
+  <div class="menu-section">
+    <h4>Emotional / Meta</h4>
+    <button onclick="secretAction('stillhere')">“You are still here”</button>
+    <button onclick="secretAction('reassurance')">Soft reassurance</button>
+    <button onclick="secretAction('heavy')">Force maximum weight</button>
+    <button onclick="secretAction('empty')">Empty the page</button>
+    <button onclick="secretAction('memory')">Memory flash</button>
+    <button onclick="secretAction('someone')">“Someone was here”</button>
+  </div>
 
-    // ===== DRAGGABLE FLOATING BUTTON =====
-    const floatBtn = document.getElementById("floatBtn");
-    let isDragging = false;
-    let offsetX, offsetY;
+  <div class="menu-section">
+    <h4>UI Control</h4>
+    <button onclick="secretAction('hideui')">Hide all UI</button>
+    <button onclick="secretAction('showui')">Show all UI</button>
+    <button onclick="secretAction('zoom')">Zoom in</button>
+    <button onclick="secretAction('darker')">Force darkest</button>
+    <button onclick="secretAction('lighter')">Force lightest</button>
+  </div>
 
-    floatBtn.addEventListener("mousedown", function(e) {
-      isDragging = true;
-      offsetX = e.clientX - floatBtn.getBoundingClientRect().left;
-      offsetY = e.clientY - floatBtn.getBoundingClientRect().top;
-      floatBtn.style.cursor = "grabbing";
+  <div class="menu-section">
+    <h4>System</h4>
+    <button onclick="secretAction('reset')">Reset everything</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="notesModal">
+  <div class="modal">
+    <button class="close" onclick="closeNotes()">&times;</button>
+    <h2>Creator’s Notes</h2>
+    <p>Hello, my name is Bentley.</p>
+    <p>I created this when I was 15. I had been struggling with my mental health for a long time and never felt comfortable opening up to the people around me. Talking about the heavier things always felt impossible, so I decided to build a place where those thoughts could exist without an audience.</p>
+    <p>I’m still struggling with my mental health. Some days are heavier than others, and I don’t have it all figured out. This page is something I made in the middle of that, not after it was over.</p>
+    <p>This site is completely private. Nothing you write is uploaded or shared. Everything stays only on your device. I made it this way on purpose — so it could feel safe.</p>
+    <p>I’m really proud of this page. It means more to me than I can fully explain. It started as something small I made for myself, and watching it become a space that others might also find useful has been one of the few things that’s made me feel like I actually created something that matters.</p>
+    <p>You can write the short, sharp things that sit in your chest, and you can also choose to release them when you’re ready. Holding on is allowed. Letting go is allowed too.</p>
+    <p>I don’t claim this is a solution. It’s just a quiet corner of the internet I wish I had when I was younger. A place to be honest without having to perform strength for anyone else.</p>
+    <p>If you are in crisis, please reach out for real support. In the United States you can call or text <strong>988</strong>. You deserve help that goes beyond a webpage.</p>
+    <p>Thank you for being here.</p>
+  </div>
+</div>
+
+<script data-goatcounter="https://mentallyunstable69420.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script>
+const STORAGE_KEY="putittorest_custom_lines",GOOD_KEY="putittorest_good_lines",PRIVATE_KEY="putittorest_private_lines",END_KEY="putittorest_end_note",PASS_KEY="putittorest_password",DEFAULT_PASSWORD="rest";
+const base=["I'm a failure","I hate myself","I'm worthless","Nothing I do is ever good enough","I'm a disappointment","I can't do anything right","Everyone would be better off without me","I'm just taking up space","I hate how I look","I hate how I sound","I hate everything about me","I'm so tired of being me","I keep messing everything up","I don't deserve good things","I'm broken","No one actually cares","I'm invisible","I'm a burden","I ruin everything I touch","I'm not strong enough","I'm not smart enough","I'm not good enough","I hate my life","I hate waking up","I feel empty all the time","I'm stuck and I'll never get out","I'm a waste of potential","I'm a waste of time","I'm a waste of space","I don't matter","I'm exhausted of pretending","I'm falling behind everyone","I have no real friends","I'm the problem","I make people tired","I talk too much and say nothing","I should be better by now","I'm running out of reasons","I feel nothing most days","I'm scared of myself","I don't trust my own mind","I'm tired of hoping","I feel like giving up","No one understands me","I'm always the second choice","I push everyone away","I'm too much and not enough at the same time","I fake being okay every day","I don't know who I am anymore","I'm drowning and no one notices","I wish I could start over","I'm ashamed of who I am","I feel completely alone","I don't belong anywhere","I'm tired of fighting myself","I hate the person in the mirror","Nothing feels real anymore","I'm losing myself","I don't see a future","I'm just existing, not living"];
+const compliments=["You are good enough.","You are trying, and that matters.","It’s okay to feel this way.","You deserve rest.","You are not a burden.","You are allowed to take up space.","You are doing the best you can.","You matter.","It’s okay to not be okay.","You are stronger than you feel right now.","You don’t have to fix everything today.","You are worthy of kindness.","Your feelings are valid.","You are not alone in this.","It’s okay to ask for help.","You have survived hard days before.","You are more than your worst thoughts.","You deserve gentleness, especially from yourself.","This moment does not define you.","You are allowed to rest without earning it."];
+
+let custom=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+let goodLines=JSON.parse(localStorage.getItem(GOOD_KEY)||"[]");
+let privateLines=JSON.parse(localStorage.getItem(PRIVATE_KEY)||"[]");
+
+/* ===== DRAGGABLE BUTTON ===== */
+const floatBtn=document.getElementById("floatBtn");
+let isDragging=false,offsetX,offsetY,moved=false;
+
+floatBtn.addEventListener("mousedown",e=>{
+  isDragging=true;moved=false;
+  offsetX=e.clientX-floatBtn.getBoundingClientRect().left;
+  offsetY=e.clientY-floatBtn.getBoundingClientRect().top;
+  floatBtn.style.cursor="grabbing";
+});
+document.addEventListener("mousemove",e=>{
+  if(!isDragging)return;
+  moved=true;
+  floatBtn.style.left=(e.clientX-offsetX)+"px";
+  floatBtn.style.top=(e.clientY-offsetY)+"px";
+  floatBtn.style.right="auto";floatBtn.style.bottom="auto";
+});
+document.addEventListener("mouseup",()=>{
+  isDragging=false;floatBtn.style.cursor="grab";
+});
+floatBtn.addEventListener("click",()=>{if(!moved)toggleSecretMenu()});
+
+/* Touch */
+floatBtn.addEventListener("touchstart",e=>{
+  isDragging=true;moved=false;
+  const t=e.touches[0];
+  offsetX=t.clientX-floatBtn.getBoundingClientRect().left;
+  offsetY=t.clientY-floatBtn.getBoundingClientRect().top;
+},{passive:true});
+document.addEventListener("touchmove",e=>{
+  if(!isDragging)return;moved=true;
+  const t=e.touches[0];
+  floatBtn.style.left=(t.clientX-offsetX)+"px";
+  floatBtn.style.top=(t.clientY-offsetY)+"px";
+  floatBtn.style.right="auto";floatBtn.style.bottom="auto";
+},{passive:true});
+document.addEventListener("touchend",()=>{isDragging=false});
+
+function toggleSecretMenu(){document.getElementById("secretMenu").classList.toggle("open")}
+
+/* ===== SECRET ACTIONS ===== */
+function secretAction(a){
+  const body=document.body;
+  const lines=document.querySelectorAll(".line");
+
+  if(a==="float") body.classList.toggle("floaty");
+  if(a==="shake") body.classList.toggle("shake");
+  if(a==="glitch") body.classList.toggle("glitch");
+  if(a==="bigtext") lines.forEach(el=>el.style.fontSize=el.style.fontSize==="1.6rem"?"":"1.6rem");
+  if(a==="tiny") lines.forEach(el=>el.style.fontSize=el.style.fontSize==="0.75rem"?"":"0.75rem");
+  if(a==="spin"){body.style.transition="transform 9s linear";body.style.transform=body.style.transform==="rotate(360deg)"?"":"rotate(360deg)"}
+  if(a==="confetti"){
+    for(let i=0;i<20;i++){
+      const w=document.createElement("div");
+      w.textContent=["you","matter","breathe","rest","okay","here","stay","soft","enough"][Math.floor(Math.random()*9)];
+      w.style.cssText=`position:fixed;left:${Math.random()*90}%;top:${Math.random()*80}%;color:#e74c3c;opacity:.55;font-size:.9rem;pointer-events:none;z-index:200;transition:all 4.5s ease`;
+      document.body.appendChild(w);
+      setTimeout(()=>{w.style.top="-60px";w.style.opacity="0"},40);
+      setTimeout(()=>w.remove(),4600);
+    }
+  }
+  if(a==="invert") body.style.filter=body.style.filter==="invert(1)"?"":"invert(1)";
+  if(a==="mirror") body.style.transform=body.style.transform==="scaleX(-1)"?"":"scaleX(-1)";
+  if(a==="pulse") body.classList.toggle("pulse-bg");
+  if(a==="rainbow") body.classList.toggle("rainbow-text");
+  if(a==="hideui") document.querySelectorAll(".nav,.controls,.stats,footer,.end-of-day").forEach(el=>el.style.display="none");
+  if(a==="showui"){document.querySelectorAll(".nav,.controls,.stats,footer").forEach(el=>el.style.display="");checkEndOfDay()}
+  if(a==="blur") body.style.filter=body.style.filter==="blur(2.5px)"?"":"blur(2.5px)";
+  if(a==="zoom"){body.style.transform=body.style.transform==="scale(1.12)"?"":"scale(1.12)";body.style.transformOrigin="center top"}
+  if(a==="darker") document.body.className=document.body.className.replace(/weight-\d/,"")+" weight-4";
+  if(a==="lighter") document.body.className=document.body.className.replace(/weight-\d/,"")+" weight-0";
+  if(a==="random"){
+    const list=["float","shake","glitch","invert","pulse","rainbow","confetti","vhs","fog","scanlines","embers"];
+    secretAction(list[Math.floor(Math.random()*list.length)]);
+  }
+  if(a==="bounce") lines.forEach((el,i)=>{el.style.animation=`floaty ${1.4+Math.random()}s ease-in-out infinite`;el.style.animationDelay=(i*.08)+"s"});
+  if(a==="wave") lines.forEach((el,i)=>el.style.transform=`rotate(${i%2===0?2.5:-2.5}deg)`);
+  if(a==="spacing") lines.forEach(el=>el.style.letterSpacing=el.style.letterSpacing==="0.18em"?"":"0.18em");
+  if(a==="handwritten") body.classList.toggle("handwritten");
+  if(a==="vhs") body.classList.toggle("vhs");
+  if(a==="matrix"){body.classList.toggle("matrix");document.querySelectorAll("h1,.tag,.line").forEach(el=>el.classList.toggle("matrix"))}
+  if(a==="rain"){
+    for(let i=0;i<30;i++){
+      const d=document.createElement("div");
+      d.textContent="│";
+      d.style.cssText=`position:fixed;left:${Math.random()*100}%;top:-30px;color:#c0392b;opacity:.35;font-size:1.1rem;pointer-events:none;z-index:180;transition:top 3.2s linear,opacity 3.2s`;
+      document.body.appendChild(d);
+      setTimeout(()=>{d.style.top="110vh";d.style.opacity="0"},30);
+      setTimeout(()=>d.remove(),3400);
+    }
+  }
+  if(a==="explode"){
+    lines.forEach(el=>{
+      el.style.transition="all .9s ease";
+      el.style.transform=`translate(${(Math.random()-.5)*220}px,${(Math.random()-.5)*180}px) rotate(${(Math.random()-.5)*50}deg)`;
+      el.style.opacity=".25";
     });
-
-    document.addEventListener("mousemove", function(e) {
-      if (!isDragging) return;
-      floatBtn.style.left = (e.clientX - offsetX) + "px";
-      floatBtn.style.top = (e.clientY - offsetY) + "px";
-      floatBtn.style.right = "auto";
-      floatBtn.style.bottom = "auto";
+    setTimeout(()=>lines.forEach(el=>{el.style.transform="";el.style.opacity=""}),1400);
+  }
+  if(a==="fog") body.classList.toggle("fog");
+  if(a==="scanlines") body.classList.toggle("scanlines");
+  if(a==="flicker") body.classList.toggle("flicker");
+  if(a==="heartbeat") body.classList.toggle("heartbeat");
+  if(a==="bleed") body.classList.toggle("bleed");
+  if(a==="ghost") body.classList.toggle("ghost");
+  if(a==="sway"){
+    body.style.transition="transform 6s ease-in-out";
+    body.style.transform=body.style.transform==="rotate(1.5deg)"?"rotate(-1.5deg)":"rotate(1.5deg)";
+  }
+  if(a==="grain"){
+    if(!document.getElementById("grainOverlay")){
+      const g=document.createElement("div");
+      g.id="grainOverlay";
+      g.style.cssText="position:fixed;inset:0;pointer-events:none;z-index:45;opacity:.08;background-image:url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+      document.body.appendChild(g);
+    } else document.getElementById("grainOverlay").remove();
+  }
+  if(a==="embers"||a==="ash"){
+    for(let i=0;i<18;i++){
+      const p=document.createElement("div");
+      p.style.cssText=`position:fixed;left:${Math.random()*100}%;top:100%;width:3px;height:3px;background:${a==="embers"?"#e74c3c":"#666"};border-radius:50%;opacity:.5;pointer-events:none;z-index:160;transition:top 5s linear,opacity 5s`;
+      document.body.appendChild(p);
+      setTimeout(()=>{p.style.top="-20px";p.style.opacity="0"},40);
+      setTimeout(()=>p.remove(),5200);
+    }
+  }
+  if(a==="chromatic") body.style.filter=body.style.filter.includes("drop-shadow")?"":"drop-shadow(2px 0 #f0f) drop-shadow(-2px 0 #0ff)";
+  if(a==="tear"){
+    const t=document.createElement("div");
+    t.style.cssText="position:fixed;left:0;right:0;height:3px;background:#e74c3c;top:40%;opacity:.7;z-index:300;pointer-events:none;transition:top 1.2s ease";
+    document.body.appendChild(t);
+    setTimeout(()=>t.style.top="70%",50);
+    setTimeout(()=>t.remove(),1400);
+  }
+  if(a==="scramble"){
+    lines.forEach(el=>{
+      const original=el.textContent;
+      el.textContent=original.split("").sort(()=>Math.random()-.5).join("");
+      setTimeout(()=>el.textContent=original,1800);
     });
-
-    document.addEventListener("mouseup", function() {
-      isDragging = false;
-      floatBtn.style.cursor = "grab";
+  }
+  if(a==="typewriter"){
+    lines.forEach((el,i)=>{
+      const text=el.textContent;
+      el.textContent="";
+      let j=0;
+      const timer=setInterval(()=>{
+        el.textContent+=text[j];j++;
+        if(j>=text.length)clearInterval(timer);
+      },18+i);
     });
-
-    // Touch support
-    floatBtn.addEventListener("touchstart", function(e) {
-      isDragging = true;
-      const touch = e.touches[0];
-      offsetX = touch.clientX - floatBtn.getBoundingClientRect().left;
-      offsetY = touch.clientY - floatBtn.getBoundingClientRect().top;
-    }, {passive: true});
-
-    document.addEventListener("touchmove", function(e) {
-      if (!isDragging) return;
-      const touch = e.touches[0];
-      floatBtn.style.left = (touch.clientX - offsetX) + "px";
-      floatBtn.style.top = (touch.clientY - offsetY) + "px";
-      floatBtn.style.right = "auto";
-      floatBtn.style.bottom = "auto";
-    }, {passive: true});
-
-    document.addEventListener("touchend", function() {
-      isDragging = false;
+  }
+  if(a==="echo"){
+    lines.forEach(el=>{
+      const clone=el.cloneNode(true);
+      clone.style.opacity=".25";
+      clone.style.transform="translate(6px,4px)";
+      clone.style.pointerEvents="none";
+      el.parentNode.insertBefore(clone,el.nextSibling);
+      setTimeout(()=>clone.remove(),2500);
     });
-
-    floatBtn.addEventListener("click", function(e) {
-      if (!isDragging) toggleSecretMenu();
+  }
+  if(a==="gravity"){
+    lines.forEach(el=>{
+      el.style.transition="transform 1.4s cubic-bezier(.5,.1,.9,.3)";
+      el.style.transform="translateY(120vh) rotate(12deg)";
     });
-
-    function toggleSecretMenu() {
-      document.getElementById("secretMenu").classList.toggle("open");
-    }
-
-    // ===== SECRET ACTIONS =====
-    function secretAction(action) {
-      const body = document.body;
-      const allLines = document.querySelectorAll(".line");
-
-      if (action === "float") body.classList.toggle("floaty");
-      if (action === "shake") body.classList.toggle("shake");
-      if (action === "glitch") body.classList.toggle("glitch");
-      if (action === "bigtext") {
-        allLines.forEach(el => el.style.fontSize = el.style.fontSize === "1.6rem" ? "" : "1.6rem");
-      }
-      if (action === "tiny") {
-        allLines.forEach(el => el.style.fontSize = el.style.fontSize === "0.75rem" ? "" : "0.75rem");
-      }
-      if (action === "spin") {
-        body.style.transition = "transform 8s linear";
-        body.style.transform = body.style.transform === "rotate(360deg)" ? "" : "rotate(360deg)";
-      }
-      if (action === "confetti") {
-        for (let i = 0; i < 18; i++) {
-          const word = document.createElement("div");
-          word.textContent = ["you","matter","breathe","rest","okay","here","stay","soft"][Math.floor(Math.random()*8)];
-          word.style.cssText = `position:fixed;left:${Math.random()*90}%;top:${Math.random()*80}%;color:#e74c3c;opacity:0.6;font-size:0.9rem;pointer-events:none;z-index:150;transition:all 4s ease;`;
-          document.body.appendChild(word);
-          setTimeout(() => { word.style.top = "-50px"; word.style.opacity = "0"; }, 50);
-          setTimeout(() => word.remove(), 4200);
-        }
-      }
-      if (action === "invert") body.style.filter = body.style.filter === "invert(1)" ? "" : "invert(1)";
-      if (action === "mirror") body.style.transform = body.style.transform === "scaleX(-1)" ? "" : "scaleX(-1)";
-      if (action === "pulse") body.classList.toggle("pulse-bg");
-      if (action === "rainbow") body.classList.toggle("rainbow-text");
-      if (action === "hideui") {
-        document.querySelectorAll(".nav, .controls, .stats, footer, .end-of-day").forEach(el => el.style.display = "none");
-      }
-      if (action === "showui") {
-        document.querySelectorAll(".nav, .controls, .stats, footer").forEach(el => el.style.display = "");
-        checkEndOfDay();
-      }
-      if (action === "blur") body.style.filter = body.style.filter === "blur(3px)" ? "" : "blur(3px)";
-      if (action === "zoom") {
-        body.style.transform = body.style.transform === "scale(1.15)" ? "" : "scale(1.15)";
-        body.style.transformOrigin = "center top";
-      }
-      if (action === "darker") document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-4";
-      if (action === "lighter") document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-0";
-      if (action === "random") {
-        const acts = ["float","shake","glitch","invert","pulse","rainbow","confetti","vhs"];
-        secretAction(acts[Math.floor(Math.random()*acts.length)]);
-      }
-      if (action === "bounce") {
-        allLines.forEach((el, i) => {
-          el.style.animation = `floaty ${1.5 + Math.random()}s ease-in-out infinite`;
-          el.style.animationDelay = (i * 0.1) + "s";
-        });
-      }
-      if (action === "wave") {
-        allLines.forEach((el, i) => {
-          el.style.transform = `rotate(${(i % 2 === 0 ? 2 : -2)}deg)`;
-        });
-      }
-      if (action === "spacing") {
-        allLines.forEach(el => el.style.letterSpacing = el.style.letterSpacing === "0.15em" ? "" : "0.15em");
-      }
-      if (action === "comic") {
-        body.style.fontFamily = body.style.fontFamily.includes("Comic") ? "" : "'Comic Sans MS', cursive";
-      }
-      if (action === "vhs") body.classList.toggle("vhs");
-      if (action === "matrix") {
-        body.classList.toggle("matrix");
-        document.querySelectorAll("h1, .tag, .line").forEach(el => el.classList.toggle("matrix"));
-      }
-      if (action === "rain") {
-        for (let i = 0; i < 25; i++) {
-          const drop = document.createElement("div");
-          drop.textContent = "│";
-          drop.style.cssText = `position:fixed;left:${Math.random()*100}%;top:-20px;color:#c0392b;opacity:0.4;font-size:1.2rem;pointer-events:none;z-index:140;transition:top 3s linear, opacity 3s;`;
-          document.body.appendChild(drop);
-          setTimeout(() => { drop.style.top = "110vh"; drop.style.opacity = "0"; }, 50);
-          setTimeout(() => drop.remove(), 3200);
-        }
-      }
-      if (action === "explode") {
-        allLines.forEach(el => {
-          el.style.transition = "all 0.8s ease";
-          el.style.transform = `translate(${(Math.random()-0.5)*200}px, ${(Math.random()-0.5)*200}px) rotate(${(Math.random()-0.5)*40}deg)`;
-          el.style.opacity = "0.3";
-        });
-        setTimeout(() => {
-          allLines.forEach(el => {
-            el.style.transform = "";
-            el.style.opacity = "";
-          });
-        }, 1200);
-      }
-      if (action === "reset") {
-        body.classList.remove("floaty","shake","glitch","pulse-bg","rainbow-text","vhs","matrix");
-        body.style.filter = "";
-        body.style.transform = "";
-        body.style.transition = "";
-        body.style.fontFamily = "";
-        allLines.forEach(el => {
-          el.style.fontSize = "";
-          el.style.letterSpacing = "";
-          el.style.transform = "";
-          el.style.opacity = "";
-          el.style.animation = "";
-          el.classList.remove("matrix");
-        });
-        document.querySelectorAll("h1, .tag").forEach(el => el.classList.remove("matrix"));
-        document.querySelectorAll(".nav, .controls, .stats, footer").forEach(el => el.style.display = "");
-        checkEndOfDay();
-        updateWeight();
-      }
-    }
-
-    // ===== REST OF THE APP =====
-    function checkEndOfDay() {
-      const hour = new Date().getHours();
-      const box = document.getElementById("endOfDay");
-      if (hour >= 18) {
-        box.classList.add("show");
-        document.getElementById("endNote").value = localStorage.getItem(END_KEY) || "";
-      } else {
-        box.classList.remove("show");
-      }
-    }
-
-    function saveEndNote() {
-      localStorage.setItem(END_KEY, document.getElementById("endNote").value.trim());
-      const msg = document.getElementById("endSaved");
-      msg.classList.add("show");
-      setTimeout(() => msg.classList.remove("show"), 1200);
-    }
-
-    function updateWeight() {
-      const count = custom.length;
-      let level = 0;
-      if (count >= 3) level = 1;
-      if (count >= 7) level = 2;
-      if (count >= 12) level = 3;
-      if (count >= 18) level = 4;
-      document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-" + level;
-    }
-
-    function save() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(custom));
-      const msg = document.getElementById("savedMsg");
-      msg.classList.add("show");
-      setTimeout(() => msg.classList.remove("show"), 1200);
-      updateWeight();
-    }
-
-    function render() {
-      const linesEl = document.getElementById("lines");
-      linesEl.innerHTML = "";
-      const all = base.concat(custom);
-      all.forEach(function(txt, i) {
-        const d = document.createElement("div");
-        d.className = "line" + (i >= base.length ? " custom" : "");
-        d.textContent = txt;
-        linesEl.appendChild(d);
-      });
-      document.getElementById("count").textContent = all.length;
-      document.getElementById("customCount").textContent = custom.length;
-      updateWeight();
-    }
-
-    function add() {
-      const input = document.getElementById("newLine");
-      const t = input.value.trim();
-      if (!t) return;
-      custom.push(t);
-      input.value = "";
-      save();
-      render();
-    }
-
-    function clearCustom() {
-      if (!custom.length) return;
-      if (confirm("Clear all the lines you added?")) {
-        custom = [];
-        save();
-        render();
-      }
-    }
-
-    function clearAllSaved() {
-      if (confirm("Permanently delete all saved lines from this browser?")) {
-        custom = [];
-        localStorage.removeItem(STORAGE_KEY);
-        render();
-      }
-    }
-
-    function randomHighlight() {
-      const items = document.querySelectorAll("#lines .line");
-      items.forEach(el => el.style.borderLeftColor = "");
-      if (!items.length) return;
-      const el = items[Math.floor(Math.random() * items.length)];
-      el.style.borderLeftColor = "#e74c3c";
-      el.scrollIntoView({behavior: "smooth", block: "center"});
-    }
-
-    function releaseAll() {
-      if (!confirm("Release everything?\n\nThis will permanently erase all lines. This cannot be undone.")) return;
-      const wrap = document.getElementById("mainWrap");
-      wrap.style.opacity = "0";
-      setTimeout(() => {
-        custom = [];
-        localStorage.removeItem(STORAGE_KEY);
-        document.getElementById("stats").style.display = "none";
-        document.getElementById("controls").style.display = "none";
-        document.getElementById("lines").innerHTML = "";
-        document.getElementById("releaseMessage").classList.add("show");
-        updateWeight();
-        wrap.style.opacity = "1";
-      }, 1500);
-      setTimeout(() => {
-        document.getElementById("releaseMessage").classList.remove("show");
-        document.getElementById("stats").style.display = "flex";
-        document.getElementById("controls").style.display = "flex";
-        render();
-      }, 20000);
-    }
-
-    function renderGood() {
-      const el = document.getElementById("goodLines");
-      el.innerHTML = "";
-      goodLines.forEach(txt => {
-        const d = document.createElement("div");
-        d.className = "line";
-        d.textContent = txt;
-        el.appendChild(d);
-      });
-    }
-
-    function addGood() {
-      const input = document.getElementById("goodInput");
-      const t = input.value.trim();
-      if (!t) return;
-      goodLines.push(t);
-      input.value = "";
-      localStorage.setItem(GOOD_KEY, JSON.stringify(goodLines));
-      const msg = document.getElementById("goodSaved");
-      msg.classList.add("show");
-      setTimeout(() => msg.classList.remove("show"), 1200);
-      renderGood();
-    }
-
-    function clearGood() {
-      if (!goodLines.length) return;
-      if (confirm("Clear all good things?")) {
-        goodLines = [];
-        localStorage.removeItem(GOOD_KEY);
-        renderGood();
-      }
-    }
-
-    function renderPrivate() {
-      const el = document.getElementById("privateLines");
-      el.innerHTML = "";
-      privateLines.forEach(txt => {
-        const d = document.createElement("div");
-        d.className = "line";
-        d.textContent = txt;
-        el.appendChild(d);
-      });
-    }
-
-    function addPrivate() {
-      const input = document.getElementById("privateInput");
-      const t = input.value.trim();
-      if (!t) return;
-      privateLines.push(t);
-      input.value = "";
-      localStorage.setItem(PRIVATE_KEY, JSON.stringify(privateLines));
-      const msg = document.getElementById("privateSaved");
-      msg.classList.add("show");
-      setTimeout(() => msg.classList.remove("show"), 1200);
-      renderPrivate();
-    }
-
-    function clearPrivate() {
-      if (!privateLines.length) return;
-      if (confirm("Clear all private lines?")) {
-        privateLines = [];
-        localStorage.removeItem(PRIVATE_KEY);
-        renderPrivate();
-      }
-    }
-
-    function checkPassword() {
-      const input = document.getElementById("passwordInput").value;
-      const saved = localStorage.getItem(PASS_KEY) || DEFAULT_PASSWORD;
-      if (input === saved) {
-        document.getElementById("passwordScreen").style.display = "none";
-        document.getElementById("privateContent").style.display = "block";
-        document.getElementById("passwordError").style.display = "none";
-        renderPrivate();
-      } else {
-        document.getElementById("passwordError").style.display = "block";
-      }
-    }
-
-    function changePassword() {
-      const newPass = document.getElementById("newPassword").value;
-      const confirm = document.getElementById("confirmPassword").value;
-      const msg = document.getElementById("passMessage");
-      if (!newPass) {
-        msg.style.color = "#c0392b";
-        msg.textContent = "Password cannot be empty";
-        return;
-      }
-      if (newPass !== confirm) {
-        msg.style.color = "#c0392b";
-        msg.textContent = "Passwords do not match";
-        return;
-      }
-      localStorage.setItem(PASS_KEY, newPass);
-      document.getElementById("newPassword").value = "";
-      document.getElementById("confirmPassword").value = "";
-      msg.style.color = "#7a9e7e";
-      msg.textContent = "Password updated";
-      setTimeout(() => msg.textContent = "", 2500);
-    }
-
-    function lockPrivateRoom() {
-      document.getElementById("privateContent").style.display = "none";
-      document.getElementById("passwordScreen").style.display = "block";
-      document.getElementById("passwordInput").value = "";
-    }
-
-    function showPrivateRoom() {
-      document.getElementById("mainPage").classList.remove("active");
-      document.getElementById("goodPage").classList.remove("active");
-      document.getElementById("privatePage").classList.add("active");
-      lockPrivateRoom();
-    }
-
-    function showGoodPage() {
-      document.getElementById("mainPage").classList.remove("active");
-      document.getElementById("privatePage").classList.remove("active");
-      document.getElementById("goodPage").classList.add("active");
-      renderGood();
-    }
-
-    function showMainPage() {
-      document.getElementById("goodPage").classList.remove("active");
-      document.getElementById("privatePage").classList.remove("active");
-      document.getElementById("mainPage").classList.add("active");
-    }
-
-    function closeAllPanels() {
-      document.getElementById("contactPanel").classList.remove("open");
-      document.getElementById("helpPanel").classList.remove("open");
-      document.getElementById("complimentPanel").classList.remove("open");
-    }
-
-    function toggleContact() {
-      const panel = document.getElementById("contactPanel");
-      const isOpen = panel.classList.contains("open");
-      closeAllPanels();
-      if (!isOpen) panel.classList.add("open");
-    }
-
-    function toggleHelp() {
-      const panel = document.getElementById("helpPanel");
-      const isOpen = panel.classList.contains("open");
-      closeAllPanels();
-      if (!isOpen) panel.classList.add("open");
-    }
-
-    function showCompliment() {
-      const panel = document.getElementById("complimentPanel");
-      const isOpen = panel.classList.contains("open");
-      closeAllPanels();
-      document.getElementById("complimentText").textContent = compliments[Math.floor(Math.random() * compliments.length)];
-      if (!isOpen) panel.classList.add("open");
-    }
-
-    function openNotes() {
-      document.getElementById("notesModal").classList.add("open");
-    }
-
-    function closeNotes() {
-      document.getElementById("notesModal").classList.remove("open");
-    }
-
-    document.getElementById("notesModal").addEventListener("click", function(e) {
-      if (e.target === this) closeNotes();
+    setTimeout(()=>lines.forEach(el=>{el.style.transform="";el.style.transition=""}),1600);
+  }
+  if(a==="orbit"){
+    lines.forEach((el,i)=>{
+      el.style.transition="transform 3s ease";
+      el.style.transform=`rotate(${i*12}deg) translateX(30px)`;
     });
+    setTimeout(()=>lines.forEach(el=>el.style.transform=""),3200);
+  }
+  if(a==="whisper"){
+    for(let i=0;i<8;i++){
+      const w=document.createElement("div");
+      w.textContent=["...","softly","still here","quiet","breathe"][Math.floor(Math.random()*5)];
+      w.style.cssText=`position:fixed;left:${10+Math.random()*80}%;top:${20+Math.random()*60}%;color:#666;font-size:.75rem;opacity:0;pointer-events:none;z-index:170;transition:opacity 2s`;
+      document.body.appendChild(w);
+      setTimeout(()=>w.style.opacity=".5",100);
+      setTimeout(()=>{w.style.opacity="0";setTimeout(()=>w.remove(),2000)},3000);
+    }
+  }
+  if(a==="stillhere"){
+    const m=document.createElement("div");
+    m.textContent="you are still here";
+    m.style.cssText="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#e74c3c;font-size:1.4rem;letter-spacing:.15em;opacity:0;z-index:400;pointer-events:none;transition:opacity 1.5s";
+    document.body.appendChild(m);
+    setTimeout(()=>m.style.opacity="1",50);
+    setTimeout(()=>{m.style.opacity="0";setTimeout(()=>m.remove(),1600)},3500);
+  }
+  if(a==="reassurance"){
+    const msgs=["it’s okay to rest","you don’t have to fix everything today","this moment is enough","you are allowed to take up space"];
+    const m=document.createElement("div");
+    m.textContent=msgs[Math.floor(Math.random()*msgs.length)];
+    m.style.cssText="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a0a0a;border:1px solid #3a1a1a;color:#c39a9a;padding:.8rem 1.4rem;border-radius:6px;z-index:400;opacity:0;transition:opacity 1s";
+    document.body.appendChild(m);
+    setTimeout(()=>m.style.opacity="1",50);
+    setTimeout(()=>{m.style.opacity="0";setTimeout(()=>m.remove(),1200)},4000);
+  }
+  if(a==="heavy") document.body.className=document.body.className.replace(/weight-\d/,"")+" weight-4";
+  if(a==="empty"){
+    document.querySelectorAll(".line").forEach(el=>el.style.opacity="0");
+    setTimeout(()=>document.querySelectorAll(".line").forEach(el=>el.style.opacity=""),2200);
+  }
+  if(a==="memory"){
+    const flash=["I was here","this mattered","one quiet night","still breathing"];
+    const m=document.createElement("div");
+    m.textContent=flash[Math.floor(Math.random()*flash.length)];
+    m.style.cssText="position:fixed;top:30%;left:50%;transform:translateX(-50%);color:#666;font-size:1.1rem;opacity:0;z-index:350;transition:opacity 1.2s;pointer-events:none";
+    document.body.appendChild(m);
+    setTimeout(()=>m.style.opacity=".7",50);
+    setTimeout(()=>{m.style.opacity="0";setTimeout(()=>m.remove(),1300)},2800);
+  }
+  if(a==="someone"){
+    const m=document.createElement("div");
+    m.textContent="someone was here before you";
+    m.style.cssText="position:fixed;bottom:40px;right:30px;color:#444;font-size:.8rem;opacity:0;z-index:300;transition:opacity 2s;pointer-events:none";
+    document.body.appendChild(m);
+    setTimeout(()=>m.style.opacity="1",100);
+    setTimeout(()=>{m.style.opacity="0";setTimeout(()=>m.remove(),2000)},5000);
+  }
 
-    document.getElementById("newLine").addEventListener("keydown", e => { if (e.key === "Enter") add(); });
-    document.getElementById("goodInput").addEventListener("keydown", e => { if (e.key === "Enter") addGood(); });
-    document.getElementById("privateInput")?.addEventListener("keydown", e => { if (e.key === "Enter") addPrivate(); });
-    document.getElementById("passwordInput").addEventListener("keydown", e => { if (e.key === "Enter") checkPassword(); });
+  if(a==="reset"){
+    body.classList.remove("floaty","shake","glitch","pulse-bg","rainbow-text","vhs","matrix","fog","scanlines","flicker","heartbeat","bleed","ghost","handwritten");
+    body.style.filter="";body.style.transform="";body.style.transition="";body.style.fontFamily="";
+    lines.forEach(el=>{
+      el.style.fontSize="";el.style.letterSpacing="";el.style.transform="";el.style.opacity="";el.style.animation="";
+      el.classList.remove("matrix");
+    });
+    document.querySelectorAll("h1,.tag").forEach(el=>el.classList.remove("matrix"));
+    document.querySelectorAll(".nav,.controls,.stats,footer").forEach(el=>el.style.display="");
+    const grain=document.getElementById("grainOverlay");if(grain)grain.remove();
+    checkEndOfDay();updateWeight();
+  }
+}
 
+/* ===== CORE APP ===== */
+function checkEndOfDay(){
+  const hour=new Date().getHours();
+  const box=document.getElementById("endOfDay");
+  if(hour>=18){box.classList.add("show");document.getElementById("endNote").value=localStorage.getItem(END_KEY)||""}
+  else box.classList.remove("show");
+}
+function saveEndNote(){
+  localStorage.setItem(END_KEY,document.getElementById("endNote").value.trim());
+  const msg=document.getElementById("endSaved");msg.classList.add("show");setTimeout(()=>msg.classList.remove("show"),1200);
+}
+function updateWeight(){
+  const c=custom.length;let l=0;
+  if(c>=3)l=1;if(c>=7)l=2;if(c>=12)l=3;if(c>=18)l=4;
+  document.body.className=document.body.className.replace(/weight-\d/,"")+" weight-"+l;
+}
+function save(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(custom));
+  const msg=document.getElementById("savedMsg");msg.classList.add("show");setTimeout(()=>msg.classList.remove("show"),1200);
+  updateWeight();
+}
+function render(){
+  const el=document.getElementById("lines");el.innerHTML="";
+  const all=base.concat(custom);
+  all.forEach((txt,i)=>{
+    const d=document.createElement("div");
+    d.className="line"+(i>=base.length?" custom":"");
+    d.textContent=txt;el.appendChild(d);
+  });
+  document.getElementById("count").textContent=all.length;
+  document.getElementById("customCount").textContent=custom.length;
+  updateWeight();
+}
+function add(){
+  const input=document.getElementById("newLine");const t=input.value.trim();
+  if(!t)return;custom.push(t);input.value="";save();render();
+}
+function clearCustom(){if(!custom.length)return;if(confirm("Clear all the lines you added?")){custom=[];save();render()}}
+function clearAllSaved(){if(confirm("Permanently delete all saved lines?")){custom=[];localStorage.removeItem(STORAGE_KEY);render()}}
+function randomHighlight(){
+  const items=document.querySelectorAll("#lines .line");
+  items.forEach(el=>el.style.borderLeftColor="");
+  if(!items.length)return;
+  const el=items[Math.floor(Math.random()*items.length)];
+  el.style.borderLeftColor="#e74c3c";el.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function releaseAll(){
+  if(!confirm("Release everything?\n\nThis will permanently erase all lines. This cannot be undone."))return;
+  const wrap=document.getElementById("mainWrap");wrap.style.opacity="0";
+  setTimeout(()=>{
+    custom=[];localStorage.removeItem(STORAGE_KEY);
+    document.getElementById("stats").style.display="none";
+    document.getElementById("controls").style.display="none";
+    document.getElementById("lines").innerHTML="";
+    document.getElementById("releaseMessage").classList.add("show");
+    updateWeight();wrap.style.opacity="1";
+  },1500);
+  setTimeout(()=>{
+    document.getElementById("releaseMessage").classList.remove("show");
+    document.getElementById("stats").style.display="flex";
+    document.getElementById("controls").style.display="flex";
     render();
-    checkEndOfDay();
-  </script>
+  },20000);
+}
+function renderGood(){
+  const el=document.getElementById("goodLines");el.innerHTML="";
+  goodLines.forEach(txt=>{const d=document.createElement("div");d.className="line";d.textContent=txt;el.appendChild(d)});
+}
+function addGood(){
+  const input=document.getElementById("goodInput");const t=input.value.trim();
+  if(!t)return;goodLines.push(t);input.value="";
+  localStorage.setItem(GOOD_KEY,JSON.stringify(goodLines));
+  const msg=document.getElementById("goodSaved");msg.classList.add("show");setTimeout(()=>msg.classList.remove("show"),1200);
+  renderGood();
+}
+function clearGood(){if(!goodLines.length)return;if(confirm("Clear all good things?")){goodLines=[];localStorage.removeItem(GOOD_KEY);renderGood()}}
+function renderPrivate(){
+  const el=document.getElementById("privateLines");el.innerHTML="";
+  privateLines.forEach(txt=>{const d=document.createElement("div");d.className="line";d.textContent=txt;el.appendChild(d)});
+}
+function addPrivate(){
+  const input=document.getElementById("privateInput");const t=input.value.trim();
+  if(!t)return;privateLines.push(t);input.value="";
+  localStorage.setItem(PRIVATE_KEY,JSON.stringify(privateLines));
+  const msg=document.getElementById("privateSaved");msg.classList.add("show");setTimeout(()=>msg.classList.remove("show"),1200);
+  renderPrivate();
+}
+function clearPrivate(){if(!privateLines.length)return;if(confirm("Clear all private lines?")){privateLines=[];localStorage.removeItem(PRIVATE_KEY);renderPrivate()}}
+function checkPassword(){
+  const input=document.getElementById("passwordInput").value;
+  const saved=localStorage.getItem(PASS_KEY)||DEFAULT_PASSWORD;
+  if(input===saved){
+    document.getElementById("passwordScreen").style.display="none";
+    document.getElementById("privateContent").style.display="block";
+    document.getElementById("passwordError").style.display="none";
+    renderPrivate();
+  }else document.getElementById("passwordError").style.display="block";
+}
+function changePassword(){
+  const n=document.getElementById("newPassword").value;
+  const c=document.getElementById("confirmPassword").value;
+  const msg=document.getElementById("passMessage");
+  if(!n){msg.style.color="#c0392b";msg.textContent="Password cannot be empty";return}
+  if(n!==c){msg.style.color="#c0392b";msg.textContent="Passwords do not match";return}
+  localStorage.setItem(PASS_KEY,n);
+  document.getElementById("newPassword").value="";document.getElementById("confirmPassword").value="";
+  msg.style.color="#7a9e7e";msg.textContent="Password updated";
+  setTimeout(()=>msg.textContent="",2500);
+}
+function lockPrivateRoom(){
+  document.getElementById("privateContent").style.display="none";
+  document.getElementById("passwordScreen").style.display="block";
+  document.getElementById("passwordInput").value="";
+}
+function showPrivateRoom(){
+  document.getElementById("mainPage").classList.remove("active");
+  document.getElementById("goodPage").classList.remove("active");
+  document.getElementById("privatePage").classList.add("active");
+  lockPrivateRoom();
+}
+function showGoodPage(){
+  document.getElementById("mainPage").classList.remove("active");
+  document.getElementById("privatePage").classList.remove("active");
+  document.getElementById("goodPage").classList.add("active");
+  renderGood();
+}
+function showMainPage(){
+  document.getElementById("goodPage").classList.remove("active");
+  document.getElementById("privatePage").classList.remove("active");
+  document.getElementById("mainPage").classList.add("active");
+}
+function closeAllPanels(){
+  document.getElementById("contactPanel").classList.remove("open");
+  document.getElementById("helpPanel").classList.remove("open");
+  document.getElementById("complimentPanel").classList.remove("open");
+}
+function toggleContact(){const p=document.getElementById("contactPanel");const o=p.classList.contains("open");closeAllPanels();if(!o)p.classList.add("open")}
+function toggleHelp(){const p=document.getElementById("helpPanel");const o=p.classList.contains("open");closeAllPanels();if(!o)p.classList.add("open")}
+function showCompliment(){
+  const p=document.getElementById("complimentPanel");const o=p.classList.contains("open");closeAllPanels();
+  document.getElementById("complimentText").textContent=compliments[Math.floor(Math.random()*compliments.length)];
+  if(!o)p.classList.add("open");
+}
+function openNotes(){document.getElementById("notesModal").classList.add("open")}
+function closeNotes(){document.getElementById("notesModal").classList.remove("open")}
+
+document.getElementById("notesModal").addEventListener("click",e=>{if(e.target===this)closeNotes()});
+document.getElementById("newLine").addEventListener("keydown",e=>{if(e.key==="Enter")add()});
+document.getElementById("goodInput").addEventListener("keydown",e=>{if(e.key==="Enter")addGood()});
+document.getElementById("privateInput")?.addEventListener("keydown",e=>{if(e.key==="Enter")addPrivate()});
+document.getElementById("passwordInput").addEventListener("keydown",e=>{if(e.key==="Enter")checkPassword()});
+
+render();
+checkEndOfDay();
+</script>
 </body>
 </html>
