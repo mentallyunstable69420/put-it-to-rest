@@ -274,76 +274,29 @@
       font-size: 0.75rem;
     }
 
-    /* Good Things Page */
-    .good-page {
-      background: radial-gradient(ellipse at top, #0a1628 0%, #050505 70%);
-    }
-    .good-page h1 {
-      color: #7ba3c9;
-      text-shadow: 0 0 22px rgba(123, 163, 201, 0.35);
-    }
+    /* Good Things */
+    .good-page { background: radial-gradient(ellipse at top, #0a1628 0%, #050505 70%); }
+    .good-page h1 { color: #7ba3c9; text-shadow: 0 0 22px rgba(123, 163, 201, 0.35); }
     .good-page .tag { color: #6b8fad; }
-    .good-page .nav button:hover {
-      background: #152030;
-      color: #a8c5e0;
-      border-color: #5a8ab5;
-    }
-    .good-lines .line {
-      border-left-color: #2a4a6a;
-      background: rgba(12, 25, 40, 0.5);
-      color: #a8c5e0;
-    }
-    .good-lines .line:hover {
-      background: rgba(20, 40, 65, 0.7);
-      border-color: #7ba3c9;
-    }
-    .good-page button.primary {
-      background: #2a5080;
-    }
-    .good-page button.primary:hover {
-      background: #3a6a9e;
-    }
-    .good-page input:focus {
-      border-color: #5a8ab5;
-      box-shadow: 0 0 0 3px rgba(90, 138, 181, 0.2);
-    }
+    .good-page .nav button:hover { background: #152030; color: #a8c5e0; border-color: #5a8ab5; }
+    .good-lines .line { border-left-color: #2a4a6a; background: rgba(12, 25, 40, 0.5); color: #a8c5e0; }
+    .good-lines .line:hover { background: rgba(20, 40, 65, 0.7); border-color: #7ba3c9; }
+    .good-page button.primary { background: #2a5080; }
+    .good-page button.primary:hover { background: #3a6a9e; }
+    .good-page input:focus { border-color: #5a8ab5; box-shadow: 0 0 0 3px rgba(90, 138, 181, 0.2); }
     .good-page .saved { color: #7ba3c9; }
 
     /* Private Room */
-    .private-room {
-      background: radial-gradient(ellipse at top, #0d0a14 0%, #050505 70%);
-    }
-    .private-room h1 {
-      color: #9b7cb8;
-      text-shadow: 0 0 22px rgba(155, 124, 184, 0.35);
-    }
+    .private-room { background: radial-gradient(ellipse at top, #0d0a14 0%, #050505 70%); }
+    .private-room h1 { color: #9b7cb8; text-shadow: 0 0 22px rgba(155, 124, 184, 0.35); }
     .private-room .tag { color: #7a6a8a; }
-    .private-room .nav button:hover {
-      background: #1a1520;
-      color: #c4b0d8;
-      border-color: #7a5a9a;
-    }
-    .private-lines .line {
-      border-left-color: #4a3a5a;
-      background: rgba(20, 15, 30, 0.5);
-      color: #c4b0d8;
-    }
-    .private-lines .line:hover {
-      background: rgba(35, 25, 50, 0.7);
-      border-color: #9b7cb8;
-    }
-    .private-room button.primary {
-      background: #5a3a7a;
-    }
-    .private-room button.primary:hover {
-      background: #7a5a9a;
-    }
-    .private-room input:focus, .private-room textarea:focus {
-      border-color: #7a5a9a;
-      box-shadow: 0 0 0 3px rgba(122, 90, 154, 0.2);
-    }
+    .private-room .nav button:hover { background: #1a1520; color: #c4b0d8; border-color: #7a5a9a; }
+    .private-lines .line { border-left-color: #4a3a5a; background: rgba(20, 15, 30, 0.5); color: #c4b0d8; }
+    .private-lines .line:hover { background: rgba(35, 25, 50, 0.7); border-color: #9b7cb8; }
+    .private-room button.primary { background: #5a3a7a; }
+    .private-room button.primary:hover { background: #7a5a9a; }
+    .private-room input:focus, .private-room textarea:focus { border-color: #7a5a9a; box-shadow: 0 0 0 3px rgba(122, 90, 154, 0.2); }
 
-    /* End of Day Note */
     .end-of-day {
       display: none;
       margin-top: 2.5rem;
@@ -366,78 +319,114 @@
       margin-bottom: 0.8rem;
     }
 
-    /* ===== GLOBAL SECRET MENU ===== */
-    .secret-btn {
+    /* ===== FLOATING DRAGGABLE BUTTON ===== */
+    #floatBtn {
       position: fixed;
-      bottom: 12px;
-      right: 12px;
-      width: 14px;
-      height: 14px;
-      background: #0a0a0a;
-      border: 1px solid #111;
-      border-radius: 2px;
-      cursor: pointer;
-      opacity: 0.25;
-      z-index: 200;
-      transition: opacity 0.3s;
+      bottom: 30px;
+      right: 30px;
+      width: 42px;
+      height: 42px;
+      background: #1a1a1a;
+      border: 1px solid #444;
+      border-radius: 50%;
+      color: #888;
+      font-size: 1.1rem;
+      cursor: grab;
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      transition: background 0.2s, border-color 0.2s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
-    .secret-btn:hover {
-      opacity: 0.6;
+    #floatBtn:hover {
+      background: #2a1515;
+      border-color: #c0392b;
+      color: #e8b4b4;
+    }
+    #floatBtn:active {
+      cursor: grabbing;
     }
 
-    .secret-menu {
+    /* ===== COMPLEX SECRET MENU ===== */
+    #secretMenu {
       display: none;
       position: fixed;
       top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      background: #0e0e0e;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #0c0c0c;
       border: 1px solid #333;
-      border-right: none;
-      border-radius: 8px 0 0 8px;
-      padding: 1rem;
-      z-index: 200;
-      width: 220px;
+      border-radius: 10px;
+      width: 320px;
       max-height: 80vh;
       overflow-y: auto;
-      box-shadow: -4px 0 20px rgba(0,0,0,0.4);
+      z-index: 400;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      padding: 0;
     }
-    .secret-menu.open {
+    #secretMenu.open {
       display: block;
     }
-    .secret-menu h4 {
-      color: #888;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.8rem;
-      text-align: center;
+    .menu-header {
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid #222;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: #0c0c0c;
+      z-index: 10;
     }
-    .secret-menu button {
+    .menu-header h3 {
+      color: #c0392b;
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .menu-close {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .menu-close:hover { color: #ccc; }
+
+    .menu-section {
+      padding: 0.8rem 1.2rem;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .menu-section:last-child { border-bottom: none; }
+    .menu-section h4 {
+      color: #555;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.6rem;
+    }
+    .menu-section button {
       display: block;
       width: 100%;
-      background: #1a1a1a;
+      background: #151515;
       color: #aaa;
-      border: 1px solid #333;
-      padding: 0.5rem 0.7rem;
-      margin-bottom: 0.4rem;
-      font-size: 0.8rem;
-      border-radius: 3px;
+      border: 1px solid #2a2a2a;
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.82rem;
+      border-radius: 4px;
       cursor: pointer;
       text-align: left;
       transition: all 0.2s;
     }
-    .secret-menu button:hover {
-      background: #252525;
-      color: #ddd;
-      border-color: #555;
-    }
-    .secret-menu .hide-btn {
-      background: #2a1515;
-      color: #c0392b;
-      border-color: #5a2020;
-      margin-top: 0.8rem;
-      text-align: center;
+    .menu-section button:hover {
+      background: #1f1f1f;
+      color: #eee;
+      border-color: #444;
     }
 
     .modal-overlay {
@@ -519,7 +508,7 @@
       text-align: center;
     }
 
-    /* Effect classes */
+    /* Effects */
     .shake { animation: shake 0.5s infinite; }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
@@ -537,9 +526,7 @@
       50% { text-shadow: -2px 0 #0ff, 2px 0 #f0f; }
       100% { text-shadow: 2px 0 #0ff, -2px 0 #f0f; }
     }
-    .pulse-bg {
-      animation: pulseBg 2s ease-in-out infinite;
-    }
+    .pulse-bg { animation: pulseBg 2s ease-in-out infinite; }
     @keyframes pulseBg {
       0%, 100% { filter: brightness(1); }
       50% { filter: brightness(1.3); }
@@ -554,6 +541,17 @@
     @keyframes rainbow {
       0% { background-position: 0%; }
       100% { background-position: 400%; }
+    }
+    .matrix { color: #0f0 !important; text-shadow: 0 0 5px #0f0; }
+    .vhs {
+      animation: vhs 0.15s infinite;
+    }
+    @keyframes vhs {
+      0% { filter: none; }
+      20% { filter: hue-rotate(90deg); }
+      40% { filter: hue-rotate(180deg); }
+      60% { filter: hue-rotate(270deg); }
+      80% { filter: contrast(1.5); }
     }
   </style>
 </head>
@@ -663,7 +661,7 @@
     </div>
   </div>
 
-  <!-- PRIVATE PASSWORD ROOM -->
+  <!-- PRIVATE ROOM -->
   <div class="page private-room" id="privatePage">
     <div class="wrap">
       <div id="passwordScreen" class="password-box">
@@ -708,31 +706,66 @@
     </div>
   </div>
 
-  <!-- GLOBAL SECRET BUTTON + MENU -->
-  <div class="secret-btn" onclick="toggleSecretMenu()"></div>
+  <!-- FLOATING BUTTON -->
+  <div id="floatBtn" title="Drag me • Click to open menu">☰</div>
 
-  <div class="secret-menu" id="secretMenu">
-    <h4>Secret Menu</h4>
-    <button onclick="secretAction('float')">Make lines float</button>
-    <button onclick="secretAction('shake')">Shake the page</button>
-    <button onclick="secretAction('glitch')">Glitch the title</button>
-    <button onclick="secretAction('bigtext')">Giant text mode</button>
-    <button onclick="secretAction('tiny')">Tiny text mode</button>
-    <button onclick="secretAction('spin')">Slow spin everything</button>
-    <button onclick="secretAction('confetti')">Spawn floating words</button>
-    <button onclick="secretAction('invert')">Invert colors</button>
-    <button onclick="secretAction('mirror')">Mirror the page</button>
-    <button onclick="secretAction('pulse')">Pulse background</button>
-    <button onclick="secretAction('rainbow')">Rainbow title</button>
-    <button onclick="secretAction('hideui')">Hide all UI</button>
-    <button onclick="secretAction('showui')">Show all UI</button>
-    <button onclick="secretAction('blur')">Blur everything</button>
-    <button onclick="secretAction('zoom')">Zoom in</button>
-    <button onclick="secretAction('darker')">Force darkest mode</button>
-    <button onclick="secretAction('lighter')">Force lightest mode</button>
-    <button onclick="secretAction('random')">Random chaos</button>
-    <button onclick="secretAction('reset')">Reset all effects</button>
-    <button class="hide-btn" onclick="toggleSecretMenu()">Hide Menu</button>
+  <!-- COMPLEX SECRET MENU -->
+  <div id="secretMenu">
+    <div class="menu-header">
+      <h3>Dev Menu</h3>
+      <button class="menu-close" onclick="toggleSecretMenu()">×</button>
+    </div>
+
+    <div class="menu-section">
+      <h4>Motion</h4>
+      <button onclick="secretAction('float')">Make lines float</button>
+      <button onclick="secretAction('shake')">Shake everything</button>
+      <button onclick="secretAction('spin')">Slow spin page</button>
+      <button onclick="secretAction('bounce')">Bounce lines</button>
+      <button onclick="secretAction('wave')">Wave text</button>
+    </div>
+
+    <div class="menu-section">
+      <h4>Visual Effects</h4>
+      <button onclick="secretAction('glitch')">Glitch title</button>
+      <button onclick="secretAction('invert')">Invert colors</button>
+      <button onclick="secretAction('mirror')">Mirror page</button>
+      <button onclick="secretAction('pulse')">Pulse background</button>
+      <button onclick="secretAction('rainbow')">Rainbow title</button>
+      <button onclick="secretAction('vhs')">VHS effect</button>
+      <button onclick="secretAction('matrix')">Matrix mode</button>
+      <button onclick="secretAction('blur')">Blur everything</button>
+    </div>
+
+    <div class="menu-section">
+      <h4>Text</h4>
+      <button onclick="secretAction('bigtext')">Giant text</button>
+      <button onclick="secretAction('tiny')">Tiny text</button>
+      <button onclick="secretAction('spacing')">Wide letter spacing</button>
+      <button onclick="secretAction('comic')">Comic font</button>
+    </div>
+
+    <div class="menu-section">
+      <h4>Chaos</h4>
+      <button onclick="secretAction('confetti')">Spawn floating words</button>
+      <button onclick="secretAction('rain')">Text rain</button>
+      <button onclick="secretAction('explode')">Explode lines</button>
+      <button onclick="secretAction('random')">Random chaos</button>
+    </div>
+
+    <div class="menu-section">
+      <h4>UI Control</h4>
+      <button onclick="secretAction('hideui')">Hide all UI</button>
+      <button onclick="secretAction('showui')">Show all UI</button>
+      <button onclick="secretAction('zoom')">Zoom in</button>
+      <button onclick="secretAction('darker')">Force darkest</button>
+      <button onclick="secretAction('lighter')">Force lightest</button>
+    </div>
+
+    <div class="menu-section">
+      <h4>System</h4>
+      <button onclick="secretAction('reset')">Reset all effects</button>
+    </div>
   </div>
 
   <div class="modal-overlay" id="notesModal">
@@ -769,6 +802,177 @@
     let goodLines = JSON.parse(localStorage.getItem(GOOD_KEY) || "[]");
     let privateLines = JSON.parse(localStorage.getItem(PRIVATE_KEY) || "[]");
 
+    // ===== DRAGGABLE FLOATING BUTTON =====
+    const floatBtn = document.getElementById("floatBtn");
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    floatBtn.addEventListener("mousedown", function(e) {
+      isDragging = true;
+      offsetX = e.clientX - floatBtn.getBoundingClientRect().left;
+      offsetY = e.clientY - floatBtn.getBoundingClientRect().top;
+      floatBtn.style.cursor = "grabbing";
+    });
+
+    document.addEventListener("mousemove", function(e) {
+      if (!isDragging) return;
+      floatBtn.style.left = (e.clientX - offsetX) + "px";
+      floatBtn.style.top = (e.clientY - offsetY) + "px";
+      floatBtn.style.right = "auto";
+      floatBtn.style.bottom = "auto";
+    });
+
+    document.addEventListener("mouseup", function() {
+      isDragging = false;
+      floatBtn.style.cursor = "grab";
+    });
+
+    // Touch support
+    floatBtn.addEventListener("touchstart", function(e) {
+      isDragging = true;
+      const touch = e.touches[0];
+      offsetX = touch.clientX - floatBtn.getBoundingClientRect().left;
+      offsetY = touch.clientY - floatBtn.getBoundingClientRect().top;
+    }, {passive: true});
+
+    document.addEventListener("touchmove", function(e) {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      floatBtn.style.left = (touch.clientX - offsetX) + "px";
+      floatBtn.style.top = (touch.clientY - offsetY) + "px";
+      floatBtn.style.right = "auto";
+      floatBtn.style.bottom = "auto";
+    }, {passive: true});
+
+    document.addEventListener("touchend", function() {
+      isDragging = false;
+    });
+
+    floatBtn.addEventListener("click", function(e) {
+      if (!isDragging) toggleSecretMenu();
+    });
+
+    function toggleSecretMenu() {
+      document.getElementById("secretMenu").classList.toggle("open");
+    }
+
+    // ===== SECRET ACTIONS =====
+    function secretAction(action) {
+      const body = document.body;
+      const allLines = document.querySelectorAll(".line");
+
+      if (action === "float") body.classList.toggle("floaty");
+      if (action === "shake") body.classList.toggle("shake");
+      if (action === "glitch") body.classList.toggle("glitch");
+      if (action === "bigtext") {
+        allLines.forEach(el => el.style.fontSize = el.style.fontSize === "1.6rem" ? "" : "1.6rem");
+      }
+      if (action === "tiny") {
+        allLines.forEach(el => el.style.fontSize = el.style.fontSize === "0.75rem" ? "" : "0.75rem");
+      }
+      if (action === "spin") {
+        body.style.transition = "transform 8s linear";
+        body.style.transform = body.style.transform === "rotate(360deg)" ? "" : "rotate(360deg)";
+      }
+      if (action === "confetti") {
+        for (let i = 0; i < 18; i++) {
+          const word = document.createElement("div");
+          word.textContent = ["you","matter","breathe","rest","okay","here","stay","soft"][Math.floor(Math.random()*8)];
+          word.style.cssText = `position:fixed;left:${Math.random()*90}%;top:${Math.random()*80}%;color:#e74c3c;opacity:0.6;font-size:0.9rem;pointer-events:none;z-index:150;transition:all 4s ease;`;
+          document.body.appendChild(word);
+          setTimeout(() => { word.style.top = "-50px"; word.style.opacity = "0"; }, 50);
+          setTimeout(() => word.remove(), 4200);
+        }
+      }
+      if (action === "invert") body.style.filter = body.style.filter === "invert(1)" ? "" : "invert(1)";
+      if (action === "mirror") body.style.transform = body.style.transform === "scaleX(-1)" ? "" : "scaleX(-1)";
+      if (action === "pulse") body.classList.toggle("pulse-bg");
+      if (action === "rainbow") body.classList.toggle("rainbow-text");
+      if (action === "hideui") {
+        document.querySelectorAll(".nav, .controls, .stats, footer, .end-of-day").forEach(el => el.style.display = "none");
+      }
+      if (action === "showui") {
+        document.querySelectorAll(".nav, .controls, .stats, footer").forEach(el => el.style.display = "");
+        checkEndOfDay();
+      }
+      if (action === "blur") body.style.filter = body.style.filter === "blur(3px)" ? "" : "blur(3px)";
+      if (action === "zoom") {
+        body.style.transform = body.style.transform === "scale(1.15)" ? "" : "scale(1.15)";
+        body.style.transformOrigin = "center top";
+      }
+      if (action === "darker") document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-4";
+      if (action === "lighter") document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-0";
+      if (action === "random") {
+        const acts = ["float","shake","glitch","invert","pulse","rainbow","confetti","vhs"];
+        secretAction(acts[Math.floor(Math.random()*acts.length)]);
+      }
+      if (action === "bounce") {
+        allLines.forEach((el, i) => {
+          el.style.animation = `floaty ${1.5 + Math.random()}s ease-in-out infinite`;
+          el.style.animationDelay = (i * 0.1) + "s";
+        });
+      }
+      if (action === "wave") {
+        allLines.forEach((el, i) => {
+          el.style.transform = `rotate(${(i % 2 === 0 ? 2 : -2)}deg)`;
+        });
+      }
+      if (action === "spacing") {
+        allLines.forEach(el => el.style.letterSpacing = el.style.letterSpacing === "0.15em" ? "" : "0.15em");
+      }
+      if (action === "comic") {
+        body.style.fontFamily = body.style.fontFamily.includes("Comic") ? "" : "'Comic Sans MS', cursive";
+      }
+      if (action === "vhs") body.classList.toggle("vhs");
+      if (action === "matrix") {
+        body.classList.toggle("matrix");
+        document.querySelectorAll("h1, .tag, .line").forEach(el => el.classList.toggle("matrix"));
+      }
+      if (action === "rain") {
+        for (let i = 0; i < 25; i++) {
+          const drop = document.createElement("div");
+          drop.textContent = "│";
+          drop.style.cssText = `position:fixed;left:${Math.random()*100}%;top:-20px;color:#c0392b;opacity:0.4;font-size:1.2rem;pointer-events:none;z-index:140;transition:top 3s linear, opacity 3s;`;
+          document.body.appendChild(drop);
+          setTimeout(() => { drop.style.top = "110vh"; drop.style.opacity = "0"; }, 50);
+          setTimeout(() => drop.remove(), 3200);
+        }
+      }
+      if (action === "explode") {
+        allLines.forEach(el => {
+          el.style.transition = "all 0.8s ease";
+          el.style.transform = `translate(${(Math.random()-0.5)*200}px, ${(Math.random()-0.5)*200}px) rotate(${(Math.random()-0.5)*40}deg)`;
+          el.style.opacity = "0.3";
+        });
+        setTimeout(() => {
+          allLines.forEach(el => {
+            el.style.transform = "";
+            el.style.opacity = "";
+          });
+        }, 1200);
+      }
+      if (action === "reset") {
+        body.classList.remove("floaty","shake","glitch","pulse-bg","rainbow-text","vhs","matrix");
+        body.style.filter = "";
+        body.style.transform = "";
+        body.style.transition = "";
+        body.style.fontFamily = "";
+        allLines.forEach(el => {
+          el.style.fontSize = "";
+          el.style.letterSpacing = "";
+          el.style.transform = "";
+          el.style.opacity = "";
+          el.style.animation = "";
+          el.classList.remove("matrix");
+        });
+        document.querySelectorAll("h1, .tag").forEach(el => el.classList.remove("matrix"));
+        document.querySelectorAll(".nav, .controls, .stats, footer").forEach(el => el.style.display = "");
+        checkEndOfDay();
+        updateWeight();
+      }
+    }
+
+    // ===== REST OF THE APP =====
     function checkEndOfDay() {
       const hour = new Date().getHours();
       const box = document.getElementById("endOfDay");
@@ -781,8 +985,7 @@
     }
 
     function saveEndNote() {
-      const val = document.getElementById("endNote").value.trim();
-      localStorage.setItem(END_KEY, val);
+      localStorage.setItem(END_KEY, document.getElementById("endNote").value.trim());
       const msg = document.getElementById("endSaved");
       msg.classList.add("show");
       setTimeout(() => msg.classList.remove("show"), 1200);
@@ -850,7 +1053,7 @@
 
     function randomHighlight() {
       const items = document.querySelectorAll("#lines .line");
-      items.forEach(function(el){ el.style.borderLeftColor = ""; });
+      items.forEach(el => el.style.borderLeftColor = "");
       if (!items.length) return;
       const el = items[Math.floor(Math.random() * items.length)];
       el.style.borderLeftColor = "#e74c3c";
@@ -882,7 +1085,7 @@
     function renderGood() {
       const el = document.getElementById("goodLines");
       el.innerHTML = "";
-      goodLines.forEach(function(txt) {
+      goodLines.forEach(txt => {
         const d = document.createElement("div");
         d.className = "line";
         d.textContent = txt;
@@ -915,7 +1118,7 @@
     function renderPrivate() {
       const el = document.getElementById("privateLines");
       el.innerHTML = "";
-      privateLines.forEach(function(txt) {
+      privateLines.forEach(txt => {
         const d = document.createElement("div");
         d.className = "line";
         d.textContent = txt;
@@ -962,7 +1165,6 @@
       const newPass = document.getElementById("newPassword").value;
       const confirm = document.getElementById("confirmPassword").value;
       const msg = document.getElementById("passMessage");
-
       if (!newPass) {
         msg.style.color = "#c0392b";
         msg.textContent = "Password cannot be empty";
@@ -973,12 +1175,11 @@
         msg.textContent = "Passwords do not match";
         return;
       }
-
       localStorage.setItem(PASS_KEY, newPass);
       document.getElementById("newPassword").value = "";
       document.getElementById("confirmPassword").value = "";
       msg.style.color = "#7a9e7e";
-      msg.textContent = "Password updated successfully";
+      msg.textContent = "Password updated";
       setTimeout(() => msg.textContent = "", 2500);
     }
 
@@ -1044,116 +1245,14 @@
       document.getElementById("notesModal").classList.remove("open");
     }
 
-    // ===== GLOBAL SECRET MENU =====
-    function toggleSecretMenu() {
-      document.getElementById("secretMenu").classList.toggle("open");
-    }
-
-    function secretAction(action) {
-      const body = document.body;
-      const allLines = document.querySelectorAll(".line");
-
-      if (action === "float") body.classList.toggle("floaty");
-      if (action === "shake") body.classList.toggle("shake");
-      if (action === "glitch") body.classList.toggle("glitch");
-      if (action === "bigtext") {
-        allLines.forEach(el => el.style.fontSize = el.style.fontSize === "1.6rem" ? "" : "1.6rem");
-      }
-      if (action === "tiny") {
-        allLines.forEach(el => el.style.fontSize = el.style.fontSize === "0.75rem" ? "" : "0.75rem");
-      }
-      if (action === "spin") {
-        body.style.transition = "transform 8s linear";
-        body.style.transform = body.style.transform === "rotate(360deg)" ? "" : "rotate(360deg)";
-      }
-      if (action === "confetti") {
-        for (let i = 0; i < 15; i++) {
-          const word = document.createElement("div");
-          word.textContent = ["you", "matter", "breathe", "rest", "okay", "here", "stay"][Math.floor(Math.random()*7)];
-          word.style.position = "fixed";
-          word.style.left = Math.random() * 90 + "%";
-          word.style.top = Math.random() * 80 + "%";
-          word.style.color = "#e74c3c";
-          word.style.opacity = "0.6";
-          word.style.fontSize = "0.9rem";
-          word.style.pointerEvents = "none";
-          word.style.zIndex = "150";
-          word.style.transition = "all 4s ease";
-          document.body.appendChild(word);
-          setTimeout(() => {
-            word.style.top = "-50px";
-            word.style.opacity = "0";
-          }, 50);
-          setTimeout(() => word.remove(), 4200);
-        }
-      }
-      if (action === "invert") {
-        body.style.filter = body.style.filter === "invert(1)" ? "" : "invert(1)";
-      }
-      if (action === "mirror") {
-        body.style.transform = body.style.transform === "scaleX(-1)" ? "" : "scaleX(-1)";
-      }
-      if (action === "pulse") {
-        body.classList.toggle("pulse-bg");
-      }
-      if (action === "rainbow") {
-        body.classList.toggle("rainbow-text");
-      }
-      if (action === "hideui") {
-        document.querySelectorAll(".nav, .controls, .stats, footer, .end-of-day").forEach(el => el.style.display = "none");
-      }
-      if (action === "showui") {
-        document.querySelectorAll(".nav, .controls, .stats, footer").forEach(el => el.style.display = "");
-        checkEndOfDay();
-      }
-      if (action === "blur") {
-        body.style.filter = body.style.filter === "blur(3px)" ? "" : "blur(3px)";
-      }
-      if (action === "zoom") {
-        body.style.transform = body.style.transform === "scale(1.15)" ? "" : "scale(1.15)";
-        body.style.transformOrigin = "center top";
-      }
-      if (action === "darker") {
-        document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-4";
-      }
-      if (action === "lighter") {
-        document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-0";
-      }
-      if (action === "random") {
-        const actions = ["float","shake","glitch","invert","pulse","rainbow","confetti"];
-        secretAction(actions[Math.floor(Math.random() * actions.length)]);
-      }
-      if (action === "reset") {
-        body.classList.remove("floaty", "shake", "glitch", "pulse-bg", "rainbow-text");
-        body.style.filter = "";
-        body.style.transform = "";
-        body.style.transition = "";
-        allLines.forEach(el => el.style.fontSize = "");
-        document.querySelectorAll(".nav, .controls, .stats, footer").forEach(el => el.style.display = "");
-        checkEndOfDay();
-        updateWeight();
-      }
-    }
-
     document.getElementById("notesModal").addEventListener("click", function(e) {
       if (e.target === this) closeNotes();
     });
 
-    document.getElementById("newLine").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") add();
-    });
-
-    document.getElementById("goodInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") addGood();
-    });
-
-    document.getElementById("privateInput")?.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") addPrivate();
-    });
-
-    document.getElementById("passwordInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") checkPassword();
-    });
+    document.getElementById("newLine").addEventListener("keydown", e => { if (e.key === "Enter") add(); });
+    document.getElementById("goodInput").addEventListener("keydown", e => { if (e.key === "Enter") addGood(); });
+    document.getElementById("privateInput")?.addEventListener("keydown", e => { if (e.key === "Enter") addPrivate(); });
+    document.getElementById("passwordInput").addEventListener("keydown", e => { if (e.key === "Enter") checkPassword(); });
 
     render();
     checkEndOfDay();
