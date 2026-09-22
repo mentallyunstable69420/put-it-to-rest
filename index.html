@@ -37,6 +37,7 @@
       padding: 3.5rem 1.5rem 6rem;
       position: relative;
       z-index: 1;
+      transition: opacity 1.5s ease;
     }
 
     header { text-align: center; margin-bottom: 1.8rem; }
@@ -170,7 +171,7 @@
       gap: 1rem;
     }
     .input-row { display: flex; gap: 0.6rem; }
-    input {
+    input, textarea {
       flex: 1;
       background: #111;
       border: 1px solid #2a2a2a;
@@ -182,9 +183,13 @@
       transition: all 0.25s;
       font-family: inherit;
     }
-    input:focus {
+    input:focus, textarea:focus {
       border-color: #c0392b;
       box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15);
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
     }
 
     button.primary {
@@ -269,7 +274,7 @@
       font-size: 0.75rem;
     }
 
-    /* Good Things Page - Blue */
+    /* Good Things Page */
     .good-page {
       background: radial-gradient(ellipse at top, #0a1628 0%, #050505 70%);
     }
@@ -302,8 +307,121 @@
       border-color: #5a8ab5;
       box-shadow: 0 0 0 3px rgba(90, 138, 181, 0.2);
     }
-    .good-page .saved {
-      color: #7ba3c9;
+    .good-page .saved { color: #7ba3c9; }
+
+    /* Private Room */
+    .private-room {
+      background: radial-gradient(ellipse at top, #0d0a14 0%, #050505 70%);
+    }
+    .private-room h1 {
+      color: #9b7cb8;
+      text-shadow: 0 0 22px rgba(155, 124, 184, 0.35);
+    }
+    .private-room .tag { color: #7a6a8a; }
+    .private-room .nav button:hover {
+      background: #1a1520;
+      color: #c4b0d8;
+      border-color: #7a5a9a;
+    }
+    .private-lines .line {
+      border-left-color: #4a3a5a;
+      background: rgba(20, 15, 30, 0.5);
+      color: #c4b0d8;
+    }
+    .private-lines .line:hover {
+      background: rgba(35, 25, 50, 0.7);
+      border-color: #9b7cb8;
+    }
+    .private-room button.primary {
+      background: #5a3a7a;
+    }
+    .private-room button.primary:hover {
+      background: #7a5a9a;
+    }
+    .private-room input:focus, .private-room textarea:focus {
+      border-color: #7a5a9a;
+      box-shadow: 0 0 0 3px rgba(122, 90, 154, 0.2);
+    }
+
+    /* End of Day Note */
+    .end-of-day {
+      display: none;
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      background: rgba(20, 10, 10, 0.6);
+      border: 1px solid #3a1a1a;
+      border-radius: 4px;
+    }
+    .end-of-day.show { display: block; }
+    .end-of-day h3 {
+      color: #c39a9a;
+      font-weight: 400;
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    .end-of-day textarea {
+      width: 100%;
+      min-height: 100px;
+      margin-bottom: 0.8rem;
+    }
+
+    /* Hidden button */
+    .secret-btn {
+      position: fixed;
+      bottom: 12px;
+      right: 12px;
+      width: 14px;
+      height: 14px;
+      background: #0a0a0a;
+      border: 1px solid #111;
+      border-radius: 2px;
+      cursor: pointer;
+      opacity: 0.25;
+      z-index: 90;
+      transition: opacity 0.3s;
+    }
+    .secret-btn:hover {
+      opacity: 0.6;
+    }
+
+    /* Secret Menu */
+    .secret-menu {
+      display: none;
+      position: fixed;
+      bottom: 40px;
+      right: 20px;
+      background: #0e0e0e;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 1rem;
+      z-index: 100;
+      min-width: 180px;
+    }
+    .secret-menu.open {
+      display: block;
+    }
+    .secret-menu button {
+      display: block;
+      width: 100%;
+      background: #1a1a1a;
+      color: #aaa;
+      border: 1px solid #333;
+      padding: 0.55rem 0.8rem;
+      margin-bottom: 0.45rem;
+      font-size: 0.82rem;
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .secret-menu button:hover {
+      background: #252525;
+      color: #ddd;
+      border-color: #555;
+    }
+    .secret-menu button:last-child {
+      margin-bottom: 0;
     }
 
     .modal-overlay {
@@ -358,6 +476,17 @@
       cursor: pointer;
     }
     .modal .close:hover { color: #ccc; }
+
+    .password-box {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .password-box input {
+      max-width: 260px;
+      text-align: center;
+      margin: 1rem auto;
+      display: block;
+    }
   </style>
 </head>
 <body class="weight-0">
@@ -365,7 +494,7 @@
 
   <!-- MAIN PAGE -->
   <div class="page active" id="mainPage">
-    <div class="wrap">
+    <div class="wrap" id="mainWrap">
       <header>
         <h1>Put It To Rest</h1>
         <div class="tag">a place where you can put your thoughts to rest</div>
@@ -379,6 +508,7 @@
         <button onclick="toggleHelp()">Need Help?</button>
         <button onclick="showCompliment()">Kind Words</button>
         <button onclick="showGoodPage()">Good Things</button>
+        <button onclick="showPrivateRoom()">Private Room</button>
       </div>
 
       <div class="panel" id="contactPanel">
@@ -430,6 +560,13 @@
         <button class="release-btn" onclick="releaseAll()">Release Everything</button>
       </div>
 
+      <div class="end-of-day" id="endOfDay">
+        <h3>End of Day Note</h3>
+        <textarea id="endNote" placeholder="How are you ending the day..."></textarea>
+        <button class="primary" onclick="saveEndNote()" style="width:100%">Save Note</button>
+        <div class="saved" id="endSaved">Saved</div>
+      </div>
+
       <footer>Nothing is uploaded • Nothing is shared • Close the tab when you’re finished</footer>
     </div>
   </div>
@@ -441,13 +578,10 @@
         <h1>Good Things</h1>
         <div class="tag">a quieter place to write kind things to yourself</div>
       </header>
-
       <div class="nav">
         <button onclick="showMainPage()">← Back</button>
       </div>
-
       <div class="lines good-lines" id="goodLines"></div>
-
       <div class="controls">
         <div class="input-row">
           <input type="text" id="goodInput" placeholder="Write something kind..." maxlength="140" autocomplete="off">
@@ -456,6 +590,56 @@
         <div class="saved" id="goodSaved">Saved</div>
         <div class="actions">
           <button onclick="clearGood()">Clear All</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden button -->
+    <div class="secret-btn" onclick="toggleSecretMenu()" title=""></div>
+
+    <!-- Secret Menu -->
+    <div class="secret-menu" id="secretMenu">
+      <button onclick="secretAction(1)">Option 1</button>
+      <button onclick="secretAction(2)">Option 2</button>
+      <button onclick="secretAction(3)">Option 3</button>
+      <button onclick="secretAction(4)">Option 4</button>
+      <button onclick="secretAction(5)">Option 5</button>
+      <button onclick="secretAction(6)">Reset</button>
+    </div>
+  </div>
+
+  <!-- PRIVATE PASSWORD ROOM -->
+  <div class="page private-room" id="privatePage">
+    <div class="wrap">
+      <div id="passwordScreen" class="password-box">
+        <h1>Private Room</h1>
+        <p style="color:#888;margin:1rem 0 1.5rem;">Enter the password to enter</p>
+        <input type="password" id="passwordInput" placeholder="Password" maxlength="30">
+        <button class="primary" onclick="checkPassword()" style="margin-top:1rem;">Enter</button>
+        <p id="passwordError" style="color:#c0392b;margin-top:1rem;display:none;">Wrong password</p>
+        <br><br>
+        <button onclick="showMainPage()" style="background:none;border:none;color:#666;cursor:pointer;">← Back</button>
+      </div>
+
+      <div id="privateContent" style="display:none;">
+        <header>
+          <h1>Private Room</h1>
+          <div class="tag">a locked space only you can open</div>
+        </header>
+        <div class="nav">
+          <button onclick="showMainPage()">← Back</button>
+          <button onclick="lockPrivateRoom()">Lock Room</button>
+        </div>
+        <div class="lines private-lines" id="privateLines"></div>
+        <div class="controls">
+          <div class="input-row">
+            <input type="text" id="privateInput" placeholder="Write something only you will see..." maxlength="140" autocomplete="off">
+            <button class="primary" onclick="addPrivate()">Add</button>
+          </div>
+          <div class="saved" id="privateSaved">Saved</div>
+          <div class="actions">
+            <button onclick="clearPrivate()">Clear All</button>
+          </div>
         </div>
       </div>
     </div>
@@ -483,12 +667,36 @@
   <script>
     const STORAGE_KEY = "putittorest_custom_lines";
     const GOOD_KEY = "putittorest_good_lines";
+    const PRIVATE_KEY = "putittorest_private_lines";
+    const END_KEY = "putittorest_end_note";
+    const PASS_KEY = "putittorest_password";
+    const DEFAULT_PASSWORD = "rest";
 
     const base = ["I'm a failure","I hate myself","I'm worthless","Nothing I do is ever good enough","I'm a disappointment","I can't do anything right","Everyone would be better off without me","I'm just taking up space","I hate how I look","I hate how I sound","I hate everything about me","I'm so tired of being me","I keep messing everything up","I don't deserve good things","I'm broken","No one actually cares","I'm invisible","I'm a burden","I ruin everything I touch","I'm not strong enough","I'm not smart enough","I'm not good enough","I hate my life","I hate waking up","I feel empty all the time","I'm stuck and I'll never get out","I'm a waste of potential","I'm a waste of time","I'm a waste of space","I don't matter","I'm exhausted of pretending","I'm falling behind everyone","I have no real friends","I'm the problem","I make people tired","I talk too much and say nothing","I should be better by now","I'm running out of reasons","I feel nothing most days","I'm scared of myself","I don't trust my own mind","I'm tired of hoping","I feel like giving up","No one understands me","I'm always the second choice","I push everyone away","I'm too much and not enough at the same time","I fake being okay every day","I don't know who I am anymore","I'm drowning and no one notices","I wish I could start over","I'm ashamed of who I am","I feel completely alone","I don't belong anywhere","I'm tired of fighting myself","I hate the person in the mirror","Nothing feels real anymore","I'm losing myself","I don't see a future","I'm just existing, not living"];
     const compliments = ["You are good enough.","You are trying, and that matters.","It’s okay to feel this way.","You deserve rest.","You are not a burden.","You are allowed to take up space.","You are doing the best you can.","You matter.","It’s okay to not be okay.","You are stronger than you feel right now.","You don’t have to fix everything today.","You are worthy of kindness.","Your feelings are valid.","You are not alone in this.","It’s okay to ask for help.","You have survived hard days before.","You are more than your worst thoughts.","You deserve gentleness, especially from yourself.","This moment does not define you.","You are allowed to rest without earning it."];
 
     let custom = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     let goodLines = JSON.parse(localStorage.getItem(GOOD_KEY) || "[]");
+    let privateLines = JSON.parse(localStorage.getItem(PRIVATE_KEY) || "[]");
+
+    function checkEndOfDay() {
+      const hour = new Date().getHours();
+      const box = document.getElementById("endOfDay");
+      if (hour >= 18) {
+        box.classList.add("show");
+        document.getElementById("endNote").value = localStorage.getItem(END_KEY) || "";
+      } else {
+        box.classList.remove("show");
+      }
+    }
+
+    function saveEndNote() {
+      const val = document.getElementById("endNote").value.trim();
+      localStorage.setItem(END_KEY, val);
+      const msg = document.getElementById("endSaved");
+      msg.classList.add("show");
+      setTimeout(() => msg.classList.remove("show"), 1200);
+    }
 
     function updateWeight() {
       const count = custom.length;
@@ -561,15 +769,19 @@
 
     function releaseAll() {
       if (!confirm("Release everything?\n\nThis will permanently erase all lines. This cannot be undone.")) return;
-      custom = [];
-      localStorage.removeItem(STORAGE_KEY);
-      document.getElementById("stats").style.display = "none";
-      document.getElementById("controls").style.display = "none";
-      document.getElementById("lines").innerHTML = "";
-      document.getElementById("releaseMessage").classList.add("show");
-      updateWeight();
-
-      setTimeout(function() {
+      const wrap = document.getElementById("mainWrap");
+      wrap.style.opacity = "0";
+      setTimeout(() => {
+        custom = [];
+        localStorage.removeItem(STORAGE_KEY);
+        document.getElementById("stats").style.display = "none";
+        document.getElementById("controls").style.display = "none";
+        document.getElementById("lines").innerHTML = "";
+        document.getElementById("releaseMessage").classList.add("show");
+        updateWeight();
+        wrap.style.opacity = "1";
+      }, 1500);
+      setTimeout(() => {
         document.getElementById("releaseMessage").classList.remove("show");
         document.getElementById("stats").style.display = "flex";
         document.getElementById("controls").style.display = "flex";
@@ -610,14 +822,75 @@
       }
     }
 
+    function renderPrivate() {
+      const el = document.getElementById("privateLines");
+      el.innerHTML = "";
+      privateLines.forEach(function(txt) {
+        const d = document.createElement("div");
+        d.className = "line";
+        d.textContent = txt;
+        el.appendChild(d);
+      });
+    }
+
+    function addPrivate() {
+      const input = document.getElementById("privateInput");
+      const t = input.value.trim();
+      if (!t) return;
+      privateLines.push(t);
+      input.value = "";
+      localStorage.setItem(PRIVATE_KEY, JSON.stringify(privateLines));
+      const msg = document.getElementById("privateSaved");
+      msg.classList.add("show");
+      setTimeout(() => msg.classList.remove("show"), 1200);
+      renderPrivate();
+    }
+
+    function clearPrivate() {
+      if (!privateLines.length) return;
+      if (confirm("Clear all private lines?")) {
+        privateLines = [];
+        localStorage.removeItem(PRIVATE_KEY);
+        renderPrivate();
+      }
+    }
+
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value;
+      const saved = localStorage.getItem(PASS_KEY) || DEFAULT_PASSWORD;
+      if (input === saved) {
+        document.getElementById("passwordScreen").style.display = "none";
+        document.getElementById("privateContent").style.display = "block";
+        document.getElementById("passwordError").style.display = "none";
+        renderPrivate();
+      } else {
+        document.getElementById("passwordError").style.display = "block";
+      }
+    }
+
+    function lockPrivateRoom() {
+      document.getElementById("privateContent").style.display = "none";
+      document.getElementById("passwordScreen").style.display = "block";
+      document.getElementById("passwordInput").value = "";
+    }
+
+    function showPrivateRoom() {
+      document.getElementById("mainPage").classList.remove("active");
+      document.getElementById("goodPage").classList.remove("active");
+      document.getElementById("privatePage").classList.add("active");
+      lockPrivateRoom();
+    }
+
     function showGoodPage() {
       document.getElementById("mainPage").classList.remove("active");
+      document.getElementById("privatePage").classList.remove("active");
       document.getElementById("goodPage").classList.add("active");
       renderGood();
     }
 
     function showMainPage() {
       document.getElementById("goodPage").classList.remove("active");
+      document.getElementById("privatePage").classList.remove("active");
       document.getElementById("mainPage").classList.add("active");
     }
 
@@ -657,6 +930,56 @@
       document.getElementById("notesModal").classList.remove("open");
     }
 
+    // ===== SECRET MENU =====
+    function toggleSecretMenu() {
+      document.getElementById("secretMenu").classList.toggle("open");
+    }
+
+    function secretAction(num) {
+      const goodPage = document.getElementById("goodPage");
+      const body = document.body;
+
+      if (num === 1) {
+        goodPage.style.filter = goodPage.style.filter === "hue-rotate(180deg)" ? "" : "hue-rotate(180deg)";
+      }
+      if (num === 2) {
+        goodPage.style.filter = goodPage.style.filter === "grayscale(1)" ? "" : "grayscale(1)";
+      }
+      if (num === 3) {
+        document.querySelectorAll(".good-lines .line").forEach(el => {
+          el.style.transition = "all 0.6s";
+          el.style.transform = el.style.transform === "scale(1.03)" ? "" : "scale(1.03)";
+        });
+      }
+      if (num === 4) {
+        const tag = goodPage.querySelector(".tag");
+        if (tag.dataset.original) {
+          tag.textContent = tag.dataset.original;
+          delete tag.dataset.original;
+        } else {
+          tag.dataset.original = tag.textContent;
+          tag.textContent = "you are allowed to be gentle with yourself";
+        }
+      }
+      if (num === 5) {
+        goodPage.style.letterSpacing = goodPage.style.letterSpacing === "0.08em" ? "" : "0.08em";
+      }
+      if (num === 6) {
+        goodPage.style.filter = "";
+        goodPage.style.letterSpacing = "";
+        document.querySelectorAll(".good-lines .line").forEach(el => {
+          el.style.transform = "";
+        });
+        const tag = goodPage.querySelector(".tag");
+        if (tag.dataset.original) {
+          tag.textContent = tag.dataset.original;
+          delete tag.dataset.original;
+        }
+      }
+
+      document.getElementById("secretMenu").classList.remove("open");
+    }
+
     document.getElementById("notesModal").addEventListener("click", function(e) {
       if (e.target === this) closeNotes();
     });
@@ -669,7 +992,16 @@
       if (e.key === "Enter") addGood();
     });
 
+    document.getElementById("privateInput")?.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") addPrivate();
+    });
+
+    document.getElementById("passwordInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") checkPassword();
+    });
+
     render();
+    checkEndOfDay();
   </script>
 </body>
 </html>
