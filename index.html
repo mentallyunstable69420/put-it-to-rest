@@ -366,7 +366,7 @@
       margin-bottom: 0.8rem;
     }
 
-    /* Hidden button */
+    /* ===== GLOBAL SECRET MENU ===== */
     .secret-btn {
       position: fixed;
       bottom: 12px;
@@ -378,30 +378,40 @@
       border-radius: 2px;
       cursor: pointer;
       opacity: 0.25;
-      z-index: 90;
+      z-index: 200;
       transition: opacity 0.3s;
     }
     .secret-btn:hover {
       opacity: 0.6;
     }
 
-    /* Secret Menu */
     .secret-menu {
       display: none;
       position: fixed;
-      bottom: 40px;
-      right: 20px;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
       background: #0e0e0e;
       border: 1px solid #333;
-      border-radius: 6px;
+      border-right: none;
+      border-radius: 8px 0 0 8px;
       padding: 1rem;
-      z-index: 100;
-      min-width: 210px;
-      max-height: 70vh;
+      z-index: 200;
+      width: 220px;
+      max-height: 80vh;
       overflow-y: auto;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.4);
     }
     .secret-menu.open {
       display: block;
+    }
+    .secret-menu h4 {
+      color: #888;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
+      text-align: center;
     }
     .secret-menu button {
       display: block;
@@ -409,9 +419,9 @@
       background: #1a1a1a;
       color: #aaa;
       border: 1px solid #333;
-      padding: 0.55rem 0.8rem;
-      margin-bottom: 0.45rem;
-      font-size: 0.82rem;
+      padding: 0.5rem 0.7rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.8rem;
       border-radius: 3px;
       cursor: pointer;
       text-align: left;
@@ -422,8 +432,12 @@
       color: #ddd;
       border-color: #555;
     }
-    .secret-menu button:last-child {
-      margin-bottom: 0;
+    .secret-menu .hide-btn {
+      background: #2a1515;
+      color: #c0392b;
+      border-color: #5a2020;
+      margin-top: 0.8rem;
+      text-align: center;
     }
 
     .modal-overlay {
@@ -505,6 +519,7 @@
       text-align: center;
     }
 
+    /* Effect classes */
     .shake { animation: shake 0.5s infinite; }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
@@ -521,6 +536,24 @@
       0% { text-shadow: 2px 0 #0ff, -2px 0 #f0f; }
       50% { text-shadow: -2px 0 #0ff, 2px 0 #f0f; }
       100% { text-shadow: 2px 0 #0ff, -2px 0 #f0f; }
+    }
+    .pulse-bg {
+      animation: pulseBg 2s ease-in-out infinite;
+    }
+    @keyframes pulseBg {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+    }
+    .rainbow-text h1 {
+      background: linear-gradient(90deg, #ff0000, #ff7700, #ffff00, #00ff00, #0099ff, #6600ff, #ff00ff);
+      background-size: 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 4s linear infinite;
+    }
+    @keyframes rainbow {
+      0% { background-position: 0%; }
+      100% { background-position: 400%; }
     }
   </style>
 </head>
@@ -628,21 +661,6 @@
         </div>
       </div>
     </div>
-
-    <div class="secret-btn" onclick="toggleSecretMenu()"></div>
-
-    <div class="secret-menu" id="secretMenu">
-      <button onclick="secretAction('float')">Make lines float</button>
-      <button onclick="secretAction('shake')">Shake the page</button>
-      <button onclick="secretAction('glitch')">Glitch the title</button>
-      <button onclick="secretAction('bigtext')">Giant text mode</button>
-      <button onclick="secretAction('tiny')">Tiny text mode</button>
-      <button onclick="secretAction('spin')">Slow spin everything</button>
-      <button onclick="secretAction('confetti')">Spawn floating words</button>
-      <button onclick="secretAction('invert')">Invert colors</button>
-      <button onclick="secretAction('mirror')">Mirror the page</button>
-      <button onclick="secretAction('reset')">Reset all effects</button>
-    </div>
   </div>
 
   <!-- PRIVATE PASSWORD ROOM -->
@@ -679,7 +697,6 @@
           </div>
         </div>
 
-        <!-- Change Password Section -->
         <div class="change-pass-box">
           <p style="color:#aaa;margin-bottom:0.8rem;font-size:0.9rem;">Change Password</p>
           <input type="password" id="newPassword" placeholder="New password" maxlength="30">
@@ -689,6 +706,33 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- GLOBAL SECRET BUTTON + MENU -->
+  <div class="secret-btn" onclick="toggleSecretMenu()"></div>
+
+  <div class="secret-menu" id="secretMenu">
+    <h4>Secret Menu</h4>
+    <button onclick="secretAction('float')">Make lines float</button>
+    <button onclick="secretAction('shake')">Shake the page</button>
+    <button onclick="secretAction('glitch')">Glitch the title</button>
+    <button onclick="secretAction('bigtext')">Giant text mode</button>
+    <button onclick="secretAction('tiny')">Tiny text mode</button>
+    <button onclick="secretAction('spin')">Slow spin everything</button>
+    <button onclick="secretAction('confetti')">Spawn floating words</button>
+    <button onclick="secretAction('invert')">Invert colors</button>
+    <button onclick="secretAction('mirror')">Mirror the page</button>
+    <button onclick="secretAction('pulse')">Pulse background</button>
+    <button onclick="secretAction('rainbow')">Rainbow title</button>
+    <button onclick="secretAction('hideui')">Hide all UI</button>
+    <button onclick="secretAction('showui')">Show all UI</button>
+    <button onclick="secretAction('blur')">Blur everything</button>
+    <button onclick="secretAction('zoom')">Zoom in</button>
+    <button onclick="secretAction('darker')">Force darkest mode</button>
+    <button onclick="secretAction('lighter')">Force lightest mode</button>
+    <button onclick="secretAction('random')">Random chaos</button>
+    <button onclick="secretAction('reset')">Reset all effects</button>
+    <button class="hide-btn" onclick="toggleSecretMenu()">Hide Menu</button>
   </div>
 
   <div class="modal-overlay" id="notesModal">
@@ -1000,39 +1044,40 @@
       document.getElementById("notesModal").classList.remove("open");
     }
 
+    // ===== GLOBAL SECRET MENU =====
     function toggleSecretMenu() {
       document.getElementById("secretMenu").classList.toggle("open");
     }
 
     function secretAction(action) {
-      const goodPage = document.getElementById("goodPage");
-      const lines = document.querySelectorAll(".good-lines .line");
+      const body = document.body;
+      const allLines = document.querySelectorAll(".line");
 
-      if (action === "float") goodPage.classList.toggle("floaty");
-      if (action === "shake") goodPage.classList.toggle("shake");
-      if (action === "glitch") goodPage.classList.toggle("glitch");
+      if (action === "float") body.classList.toggle("floaty");
+      if (action === "shake") body.classList.toggle("shake");
+      if (action === "glitch") body.classList.toggle("glitch");
       if (action === "bigtext") {
-        lines.forEach(el => el.style.fontSize = el.style.fontSize === "1.6rem" ? "" : "1.6rem");
+        allLines.forEach(el => el.style.fontSize = el.style.fontSize === "1.6rem" ? "" : "1.6rem");
       }
       if (action === "tiny") {
-        lines.forEach(el => el.style.fontSize = el.style.fontSize === "0.75rem" ? "" : "0.75rem");
+        allLines.forEach(el => el.style.fontSize = el.style.fontSize === "0.75rem" ? "" : "0.75rem");
       }
       if (action === "spin") {
-        goodPage.style.transition = "transform 8s linear";
-        goodPage.style.transform = goodPage.style.transform === "rotate(360deg)" ? "" : "rotate(360deg)";
+        body.style.transition = "transform 8s linear";
+        body.style.transform = body.style.transform === "rotate(360deg)" ? "" : "rotate(360deg)";
       }
       if (action === "confetti") {
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 15; i++) {
           const word = document.createElement("div");
-          word.textContent = ["you", "matter", "breathe", "rest", "okay", "here"][Math.floor(Math.random()*6)];
+          word.textContent = ["you", "matter", "breathe", "rest", "okay", "here", "stay"][Math.floor(Math.random()*7)];
           word.style.position = "fixed";
           word.style.left = Math.random() * 90 + "%";
           word.style.top = Math.random() * 80 + "%";
-          word.style.color = "#7ba3c9";
-          word.style.opacity = "0.5";
+          word.style.color = "#e74c3c";
+          word.style.opacity = "0.6";
           word.style.fontSize = "0.9rem";
           word.style.pointerEvents = "none";
-          word.style.zIndex = "80";
+          word.style.zIndex = "150";
           word.style.transition = "all 4s ease";
           document.body.appendChild(word);
           setTimeout(() => {
@@ -1043,17 +1088,50 @@
         }
       }
       if (action === "invert") {
-        goodPage.style.filter = goodPage.style.filter === "invert(1)" ? "" : "invert(1)";
+        body.style.filter = body.style.filter === "invert(1)" ? "" : "invert(1)";
       }
       if (action === "mirror") {
-        goodPage.style.transform = goodPage.style.transform === "scaleX(-1)" ? "" : "scaleX(-1)";
+        body.style.transform = body.style.transform === "scaleX(-1)" ? "" : "scaleX(-1)";
+      }
+      if (action === "pulse") {
+        body.classList.toggle("pulse-bg");
+      }
+      if (action === "rainbow") {
+        body.classList.toggle("rainbow-text");
+      }
+      if (action === "hideui") {
+        document.querySelectorAll(".nav, .controls, .stats, footer, .end-of-day").forEach(el => el.style.display = "none");
+      }
+      if (action === "showui") {
+        document.querySelectorAll(".nav, .controls, .stats, footer").forEach(el => el.style.display = "");
+        checkEndOfDay();
+      }
+      if (action === "blur") {
+        body.style.filter = body.style.filter === "blur(3px)" ? "" : "blur(3px)";
+      }
+      if (action === "zoom") {
+        body.style.transform = body.style.transform === "scale(1.15)" ? "" : "scale(1.15)";
+        body.style.transformOrigin = "center top";
+      }
+      if (action === "darker") {
+        document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-4";
+      }
+      if (action === "lighter") {
+        document.body.className = document.body.className.replace(/weight-\d/, "") + " weight-0";
+      }
+      if (action === "random") {
+        const actions = ["float","shake","glitch","invert","pulse","rainbow","confetti"];
+        secretAction(actions[Math.floor(Math.random() * actions.length)]);
       }
       if (action === "reset") {
-        goodPage.classList.remove("floaty", "shake", "glitch");
-        goodPage.style.filter = "";
-        goodPage.style.transform = "";
-        goodPage.style.transition = "";
-        lines.forEach(el => el.style.fontSize = "");
+        body.classList.remove("floaty", "shake", "glitch", "pulse-bg", "rainbow-text");
+        body.style.filter = "";
+        body.style.transform = "";
+        body.style.transition = "";
+        allLines.forEach(el => el.style.fontSize = "");
+        document.querySelectorAll(".nav, .controls, .stats, footer").forEach(el => el.style.display = "");
+        checkEndOfDay();
+        updateWeight();
       }
     }
 
